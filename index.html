@@ -262,8 +262,9 @@
     let savedPosts =
       JSON.parse(localStorage.getItem("maddiesReposts") || "[]");
 
-    function getAllPosts() {
-      return [...originalPosts, ...savedPosts];
+   function getAllPosts() {
+  return [...savedPosts, ...originalPosts];
+
     }
 
     function getEmbedUrl(url) {
