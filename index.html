@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>my gallery ♡</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <style>
 
@@ -15,31 +22,38 @@
    ========================================================= */
 
 :root {
+
   --pink: #f5dce5;
   --pink-soft: #fff7fa;
   --pink-border: #efd5df;
+
   --text: #654f59;
   --muted: #a08b94;
+
   --white: #ffffff;
 
   --shadow:
     0 7px 22px rgba(100, 70, 85, 0.08);
+
 }
 
 
 /* =========================================================
-   BASIC RESET
+   RESET
    ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
+
 html {
   scroll-behavior: smooth;
 }
 
+
 body {
+
   margin: 0;
 
   background:
@@ -62,6 +76,7 @@ body {
     sans-serif;
 
   overflow-x: hidden;
+
 }
 
 
@@ -70,7 +85,9 @@ body {
    ========================================================= */
 
 .page {
+
   width: 100%;
+
   max-width: 1500px;
 
   margin: 0 auto;
@@ -79,6 +96,7 @@ body {
     28px
     clamp(10px, 3vw, 32px)
     60px;
+
 }
 
 
@@ -87,15 +105,19 @@ body {
    ========================================================= */
 
 .header {
+
   text-align: center;
 
   padding:
     8px
     10px
     20px;
+
 }
 
+
 .header h1 {
+
   margin: 0;
 
   font-family: Georgia, serif;
@@ -104,9 +126,12 @@ body {
 
   font-size:
     clamp(30px, 4vw, 46px);
+
 }
 
+
 .header p {
+
   margin:
     7px
     0
@@ -117,6 +142,7 @@ body {
   font-size: 13px;
 
   letter-spacing: .04em;
+
 }
 
 
@@ -125,6 +151,7 @@ body {
    ========================================================= */
 
 .actions {
+
   display: flex;
 
   justify-content: center;
@@ -134,9 +161,12 @@ body {
   gap: 8px;
 
   margin-bottom: 18px;
+
 }
 
+
 .button {
+
   border:
     1px solid
     var(--pink-border);
@@ -158,23 +188,30 @@ body {
   transition:
     transform .15s ease,
     box-shadow .15s ease;
+
 }
 
+
 .button:hover {
-  transform: translateY(-1px);
+
+  transform:
+    translateY(-1px);
 
   box-shadow:
     0 5px 15px
     rgba(100,70,85,.08);
+
 }
 
+
 .button:disabled {
+
   opacity: .6;
 
   cursor: not-allowed;
 
-  transform: none;
 }
+
 
 .admin-only {
   display: none;
@@ -186,6 +223,7 @@ body {
    ========================================================= */
 
 .section-nav {
+
   display: flex;
 
   justify-content: center;
@@ -194,10 +232,13 @@ body {
 
   gap: 7px;
 
-  margin-bottom: 25px;
+  margin-bottom: 18px;
+
 }
 
+
 .section-nav button {
+
   border:
     1px solid
     var(--pink-border);
@@ -216,21 +257,64 @@ body {
 
   font-size: 12px;
 
-  transition:
-    background .15s ease,
-    color .15s ease;
 }
+
 
 .section-nav button:hover {
-  background: var(--pink-soft);
+
+  background:
+    var(--pink-soft);
+
 }
 
+
 .section-nav button.active {
-  background: var(--pink-soft);
 
-  color: var(--text);
+  background:
+    var(--pink-soft);
 
-  border-color: #dcaabb;
+  color:
+    var(--text);
+
+  border-color:
+    #dcaabb;
+
+}
+
+
+/* =========================================================
+   SORT
+   ========================================================= */
+
+.sort-row {
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 25px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+
+}
+
+
+.sort-row select {
+
+  width: auto;
+
+  min-width: 150px;
+
+  padding:
+    7px
+    12px;
+
 }
 
 
@@ -239,12 +323,16 @@ body {
    ========================================================= */
 
 .section-heading {
+
   text-align: center;
 
   margin-bottom: 18px;
+
 }
 
+
 .section-heading h2 {
+
   margin: 0;
 
   font-family: Georgia, serif;
@@ -252,9 +340,12 @@ body {
   font-size: 23px;
 
   font-weight: 500;
+
 }
 
+
 .section-heading p {
+
   margin:
     5px
     0
@@ -267,6 +358,7 @@ body {
   white-space: pre-wrap;
 
   overflow-wrap: anywhere;
+
 }
 
 
@@ -294,6 +386,7 @@ body {
     );
 
   width: 100%;
+
 }
 
 
@@ -307,7 +400,8 @@ body {
 
   min-width: 0;
 
-  background: white;
+  background:
+    var(--white);
 
   border:
     1px solid
@@ -322,9 +416,11 @@ body {
 
   overflow: hidden;
 
-  box-shadow: var(--shadow);
+  box-shadow:
+    var(--shadow);
 
   align-self: start;
+
 }
 
 
@@ -333,26 +429,28 @@ body {
    ========================================================= */
 
 .media {
+
   width: 100%;
 
   overflow: hidden;
 
-  background: #fff;
+  background:
+    #fff;
+
 }
 
 
 /*
-  Images:
+  PHOTOS
 
-  The image keeps its natural aspect ratio.
+  No fixed height.
+  No cropping.
+  Natural aspect ratio.
 
-  It is NOT given a fixed height.
+  The image can remain at its natural
+  dimensions when it fits the card.
 
-  width: auto means we don't force the
-  actual image itself to stretch.
-
-  max-width: 100% prevents horizontal
-  scrolling on small screens.
+  max-width prevents horizontal scrolling.
 */
 
 .media img {
@@ -366,17 +464,18 @@ body {
   max-width: 100%;
 
   margin:
-    0
-    auto;
+    0 auto;
 
   cursor: zoom-in;
+
 }
 
 
 /*
-  Videos stay responsive because
-  native video controls need a
-  predictable width.
+  VIDEOS
+
+  Videos remain responsive and
+  have native controls.
 */
 
 .media video {
@@ -390,19 +489,27 @@ body {
   max-width: 100%;
 
   background: #000;
+
 }
 
 
 /* =========================================================
-   DATE
+   INFO
    ========================================================= */
 
-.date {
+.memory-info {
 
   padding:
-    10px
+    11px
     13px
-    0;
+    13px;
+
+}
+
+
+/* DATE */
+
+.date {
 
   color: var(--muted);
 
@@ -411,19 +518,28 @@ body {
   text-transform: uppercase;
 
   letter-spacing: .07em;
+
+  margin-bottom: 5px;
+
 }
 
 
-/* =========================================================
-   CAPTION
-   ========================================================= */
+/* LOCATION */
+
+.location {
+
+  color: #9b7784;
+
+  font-size: 11px;
+
+  margin-bottom: 6px;
+
+}
+
+
+/* CAPTION */
 
 .caption {
-
-  padding:
-    7px
-    13px
-    13px;
 
   font-family: Georgia, serif;
 
@@ -434,6 +550,7 @@ body {
   white-space: pre-wrap;
 
   overflow-wrap: anywhere;
+
 }
 
 
@@ -451,32 +568,45 @@ body {
     0
     10px
     10px;
+
 }
 
-body.admin-mode .card-actions {
+
+body.admin-mode
+.card-actions {
+
   display: flex;
+
 }
+
 
 .delete-button {
 
   border: 0;
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
   cursor: pointer;
 
   font-size: 11px;
+
 }
 
+
 .delete-button:hover {
-  color: #9b596e;
+
+  color:
+    #9b596e;
+
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   EMPTY
    ========================================================= */
 
 .empty {
@@ -490,9 +620,13 @@ body.admin-mode .card-actions {
 
   text-align: center;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
-  font-family: Georgia, serif;
+  font-family:
+    Georgia,
+    serif;
+
 }
 
 
@@ -527,11 +661,15 @@ body.admin-mode .card-actions {
 
   backdrop-filter:
     blur(5px);
+
 }
+
 
 .modal.open,
 .lightbox.open {
+
   display: flex;
+
 }
 
 
@@ -545,20 +683,27 @@ body.admin-mode .card-actions {
       100%
     );
 
-  max-height: 90vh;
+  max-height:
+    90vh;
 
-  overflow-y: auto;
+  overflow-y:
+    auto;
 
-  padding: 24px;
+  padding:
+    24px;
 
-  background: white;
+  background:
+    white;
 
-  border-radius: 22px;
+  border-radius:
+    22px;
 
   box-shadow:
     0 25px 80px
     rgba(0,0,0,.2);
+
 }
+
 
 .modal-box h2 {
 
@@ -567,10 +712,15 @@ body.admin-mode .card-actions {
     0
     5px;
 
-  font-family: Georgia, serif;
+  font-family:
+    Georgia,
+    serif;
 
-  font-weight: 500;
+  font-weight:
+    500;
+
 }
+
 
 .modal-subtitle {
 
@@ -579,35 +729,50 @@ body.admin-mode .card-actions {
     0
     20px;
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
-  font-size: 12px;
+  font-size:
+    12px;
+
 }
 
 
 .close {
 
-  position: absolute;
+  position:
+    absolute;
 
-  top: 12px;
+  top:
+    12px;
 
-  right: 15px;
+  right:
+    15px;
 
-  width: 34px;
+  width:
+    34px;
 
-  height: 34px;
+  height:
+    34px;
 
-  border: 0;
+  border:
+    0;
 
-  border-radius: 50%;
+  border-radius:
+    50%;
 
-  background: var(--pink-soft);
+  background:
+    var(--pink-soft);
 
-  color: var(--text);
+  color:
+    var(--text);
 
-  font-size: 20px;
+  font-size:
+    20px;
 
-  cursor: pointer;
+  cursor:
+    pointer;
+
 }
 
 
@@ -617,91 +782,133 @@ body.admin-mode .card-actions {
 
 .form-group {
 
-  margin-bottom: 15px;
+  margin-bottom:
+    15px;
+
 }
+
 
 .form-group label {
 
-  display: block;
+  display:
+    block;
 
-  margin-bottom: 6px;
+  margin-bottom:
+    6px;
 
-  font-size: 12px;
+  font-size:
+    12px;
 
-  font-weight: 600;
+  font-weight:
+    600;
+
 }
+
 
 input,
 select,
 textarea {
 
-  width: 100%;
+  width:
+    100%;
 
   border:
     1px solid
     var(--pink-border);
 
-  border-radius: 12px;
+  border-radius:
+    12px;
 
   padding:
     10px
     12px;
 
-  background: #fffafb;
+  background:
+    #fffafb;
 
-  color: var(--text);
+  color:
+    var(--text);
 
-  font: inherit;
+  font:
+    inherit;
 
-  font-size: 13px;
+  font-size:
+    13px;
+
 }
+
 
 textarea {
 
-  min-height: 90px;
+  min-height:
+    90px;
 
-  resize: vertical;
+  resize:
+    vertical;
+
 }
+
 
 .submit {
 
-  width: 100%;
+  width:
+    100%;
 
-  border: 0;
+  border:
+    0;
 
-  border-radius: 999px;
+  border-radius:
+    999px;
 
-  padding: 11px;
+  padding:
+    11px;
 
-  background: var(--pink);
+  background:
+    var(--pink);
 
-  color: #765766;
+  color:
+    #765766;
 
-  cursor: pointer;
+  cursor:
+    pointer;
+
 }
+
 
 .submit:disabled {
 
-  opacity: .6;
+  opacity:
+    .6;
 
-  cursor: not-allowed;
+  cursor:
+    not-allowed;
+
 }
+
 
 .status {
 
-  display: none;
+  display:
+    none;
 
-  padding: 9px;
+  padding:
+    9px;
 
-  margin-bottom: 14px;
+  margin-bottom:
+    14px;
 
-  border-radius: 10px;
+  border-radius:
+    10px;
 
-  background: var(--pink-soft);
+  background:
+    var(--pink-soft);
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
-  font-size: 12px;
+  font-size:
+    12px;
+
 }
 
 
@@ -711,35 +918,47 @@ textarea {
 
 .lightbox img {
 
-  display: block;
+  display:
+    block;
 
-  max-width: 94vw;
+  max-width:
+    94vw;
 
-  max-height: 90vh;
+  max-height:
+    90vh;
 
-  width: auto;
+  width:
+    auto;
 
-  height: auto;
+  height:
+    auto;
 
-  border-radius: 18px;
+  border-radius:
+    18px;
 
   box-shadow:
     0 20px 80px
     rgba(0,0,0,.3);
+
 }
+
 
 .lightbox .close {
 
-  position: fixed;
+  position:
+    fixed;
 
-  top: 15px;
+  top:
+    15px;
 
-  right: 18px;
+  right:
+    18px;
+
 }
 
 
 /* =========================================================
-   TABLET / MOBILE
+   MOBILE
    ========================================================= */
 
 @media (max-width: 900px) {
@@ -751,6 +970,7 @@ textarea {
         2,
         minmax(0, 1fr)
       );
+
   }
 
 }
@@ -760,10 +980,14 @@ textarea {
 
   .page {
 
-    padding-left: 9px;
+    padding-left:
+      9px;
 
-    padding-right: 9px;
+    padding-right:
+      9px;
+
   }
+
 
   .gallery {
 
@@ -773,27 +997,41 @@ textarea {
         minmax(0, 1fr)
       );
 
-    gap: 9px;
+    gap:
+      9px;
+
   }
+
 
   .card {
 
-    border-radius: 14px;
+    border-radius:
+      14px;
+
   }
+
+
+  .memory-info {
+
+    padding:
+      9px
+      10px
+      11px;
+
+  }
+
 
   .caption {
 
-    font-size: 13px;
+    font-size:
+      13px;
 
-    padding:
-      6px
-      10px
-      11px;
   }
 
 }
 
 </style>
+
 </head>
 
 
@@ -805,7 +1043,8 @@ textarea {
 
 <!-- =======================================================
      HEADER
-     Change the title/subtitle here if you want.
+
+     CHANGE YOUR TITLE/SUBTITLE HERE
      ======================================================= -->
 
 <header class="header">
@@ -875,9 +1114,42 @@ textarea {
 </nav>
 
 
+<!-- =======================================================
+     SECTION HEADING
+     ======================================================= -->
+
 <div
   class="section-heading"
   id="sectionHeading">
+</div>
+
+
+<!-- =======================================================
+     SORTING
+     ======================================================= -->
+
+<div class="sort-row">
+
+  <span>
+    sort by
+  </span>
+
+  <select id="sortSelect">
+
+    <option value="newest">
+      newest first
+    </option>
+
+    <option value="oldest">
+      oldest first
+    </option>
+
+    <option value="added">
+      recently added
+    </option>
+
+  </select>
+
 </div>
 
 
@@ -890,9 +1162,7 @@ textarea {
   id="gallery">
 
   <div class="empty">
-
     loading memories ♡
-
   </div>
 
 </section>
@@ -1052,6 +1322,20 @@ textarea {
     <div class="form-group">
 
       <label>
+        Location — optional
+      </label>
+
+      <input
+        id="memoryLocation"
+        type="text"
+        placeholder="Toronto, Canada">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
         Caption — optional
       </label>
 
@@ -1179,29 +1463,19 @@ textarea {
 
    SUPABASE SETTINGS
 
-   ONLY CHANGE THESE TWO VALUES.
+   PUT YOUR REAL PUBLISHABLE / ANON KEY HERE.
 
-   Your URL should look like:
-
-   https://xxxxxxxx.supabase.co
-
-   DO NOT add:
-   /rest/v1/
-   /auth/v1/
-   /storage/v1/
-
-   NEVER put your service_role/secret key here.
+   DO NOT USE A SERVICE_ROLE SECRET KEY.
 
    =========================================================
    ========================================================= */
-
 
 const SUPABASE_URL =
   "https://jhdjzuneqtmtglindcia.supabase.co";
 
 
 const SUPABASE_KEY =
-  "sb_publishable_SadDNJrtj5XnMUDKB0vr4Q_NBgu1PXK";
+  "PASTE-YOUR-PUBLISHABLE-OR-ANON-KEY-HERE";
 
 
 const supabaseClient =
@@ -1212,9 +1486,7 @@ const supabaseClient =
 
 
 /* =========================================================
-   YOUR ADMIN USER ID
-
-   This is the Supabase account that can upload/delete.
+   ADMIN ACCOUNT
    ========================================================= */
 
 const ADMIN_UID =
@@ -1222,14 +1494,20 @@ const ADMIN_UID =
 
 
 /* =========================================================
-   CURRENT STATE
+   STATE
    ========================================================= */
 
-let currentUser = null;
+let currentUser =
+  null;
 
-let sections = [];
+let sections =
+  [];
 
-let activeSection = "all";
+let activeSection =
+  "all";
+
+let currentSort =
+  "newest";
 
 
 /* =========================================================
@@ -1257,26 +1535,6 @@ function closeModal(id) {
 
 
 /* =========================================================
-   ADMIN BUTTON
-   ========================================================= */
-
-document
-  .getElementById("adminButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      if (currentUser) {
-        return;
-      }
-
-      openModal("loginModal");
-
-    }
-  );
-
-
-/* =========================================================
    CLOSE BUTTONS
    ========================================================= */
 
@@ -1296,6 +1554,28 @@ document
     );
 
   });
+
+
+/* =========================================================
+   ADMIN BUTTON
+   ========================================================= */
+
+document
+  .getElementById("adminButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (currentUser) {
+        return;
+      }
+
+      openModal(
+        "loginModal"
+      );
+
+    }
+  );
 
 
 /* =========================================================
@@ -1332,7 +1612,10 @@ document
         "none";
 
 
-      if (!email || !password) {
+      if (
+        !email ||
+        !password
+      ) {
 
         status.textContent =
           "Please enter your email and password ♡";
@@ -1393,7 +1676,8 @@ document
 
       if (
         !data.user ||
-        data.user.id !== ADMIN_UID
+        data.user.id !==
+        ADMIN_UID
       ) {
 
         await supabaseClient
@@ -1470,7 +1754,8 @@ function updateAdminUI() {
 
       const isAdmin =
         currentUser &&
-        currentUser.id === ADMIN_UID;
+        currentUser.id ===
+        ADMIN_UID;
 
 
       element.style.display =
@@ -1517,7 +1802,8 @@ async function loadSections() {
       error
     );
 
-    sections = [];
+    sections =
+      [];
 
     renderSectionNavigation();
 
@@ -1541,14 +1827,6 @@ async function loadSections() {
 
 /* =========================================================
    SECTION NAVIGATION
-
-   IMPORTANT:
-
-   We intentionally hide the database entry
-   called "all memories ♡" because the website
-   already creates the "all memories ♡" button.
-
-   This prevents duplicate buttons.
    ========================================================= */
 
 function renderSectionNavigation() {
@@ -1564,9 +1842,7 @@ function renderSectionNavigation() {
     "";
 
 
-  /* -------------------------------------------------------
-     BUILT-IN ALL MEMORIES BUTTON
-     ------------------------------------------------------- */
+  /* BUILT-IN ALL MEMORIES */
 
   const allButton =
     document.createElement(
@@ -1580,7 +1856,8 @@ function renderSectionNavigation() {
 
   allButton.classList.toggle(
     "active",
-    activeSection === "all"
+    activeSection ===
+    "all"
   );
 
 
@@ -1605,11 +1882,11 @@ function renderSectionNavigation() {
   );
 
 
-  /* -------------------------------------------------------
-     OTHER DATABASE SECTIONS ONLY
-
-     "all memories ♡" is hidden here.
-     ------------------------------------------------------- */
+  /*
+    Don't display a duplicate
+    database section called
+    "all memories ♡".
+  */
 
   sections
     .filter(
@@ -1666,7 +1943,7 @@ function renderSectionNavigation() {
 
 
 /* =========================================================
-   SECTION SELECT FOR UPLOADS
+   SECTION SELECT
    ========================================================= */
 
 function renderSectionSelect() {
@@ -1681,12 +1958,6 @@ function renderSectionSelect() {
   select.innerHTML =
     "";
 
-
-  /*
-    If no custom sections exist,
-    memories can still be placed
-    into "all memories ♡".
-  */
 
   const allOption =
     document.createElement(
@@ -1802,7 +2073,9 @@ function updateHeading() {
   );
 
 
-  if (section.subtitle) {
+  if (
+    section.subtitle
+  ) {
 
     const subtitle =
       document.createElement(
@@ -1824,7 +2097,29 @@ function updateHeading() {
 
 
 /* =========================================================
-   PUBLIC STORAGE URL
+   SORT CONTROL
+   ========================================================= */
+
+document
+  .getElementById(
+    "sortSelect"
+  )
+  .addEventListener(
+    "change",
+    event => {
+
+      currentSort =
+        event.target.value;
+
+
+      loadGallery();
+
+    }
+  );
+
+
+/* =========================================================
+   STORAGE URL
    ========================================================= */
 
 function getMediaURL(
@@ -1851,6 +2146,159 @@ function getMediaURL(
 
 
 /* =========================================================
+   SORT MEMORIES
+   ========================================================= */
+
+function sortMemories(
+  memories
+) {
+
+  return [
+    ...memories
+  ].sort(
+    (a, b) => {
+
+      if (
+        currentSort ===
+        "added"
+      ) {
+
+        return new Date(
+          b.created_at
+        ) -
+        new Date(
+          a.created_at
+        );
+
+      }
+
+
+      /*
+        Memories with an actual
+        memory_date are sorted first.
+
+        Memories without a date
+        fall to the bottom.
+      */
+
+      const dateA =
+        a.memory_date
+          ? new Date(
+              a.memory_date
+            ).getTime()
+          : null;
+
+
+      const dateB =
+        b.memory_date
+          ? new Date(
+              b.memory_date
+            ).getTime()
+          : null;
+
+
+      if (
+        dateA === null &&
+        dateB === null
+      ) {
+
+        return new Date(
+          b.created_at
+        ) -
+        new Date(
+          a.created_at
+        );
+
+      }
+
+
+      if (
+        dateA === null
+      ) {
+
+        return 1;
+
+      }
+
+
+      if (
+        dateB === null
+      ) {
+
+        return -1;
+
+      }
+
+
+      if (
+        currentSort ===
+        "oldest"
+      ) {
+
+        return dateA -
+          dateB;
+
+      }
+
+
+      return dateB -
+        dateA;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+    return "";
+  }
+
+
+  const date =
+    new Date(
+      value +
+      "T00:00:00"
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return value;
+
+  }
+
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:
+        "numeric",
+
+      month:
+        "long",
+
+      day:
+        "numeric"
+    }
+  );
+
+}
+
+
+/* =========================================================
    LOAD GALLERY
    ========================================================= */
 
@@ -1866,29 +2314,24 @@ async function loadGallery() {
       );
 
 
-  gallery.innerHTML =
-    `
-      <div class="empty">
-        loading memories ♡
-      </div>
-    `;
+  gallery.innerHTML = `
+    <div class="empty">
+      loading memories ♡
+    </div>
+  `;
 
 
   let query =
     supabaseClient
       .from("memories")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+      .select("*");
 
 
-  /* -------------------------------------------------------
-     FILTER BY SECTION
-     ------------------------------------------------------- */
+  /*
+    We don't use database ordering
+    here because the website handles
+    the three sorting choices.
+  */
 
   if (
     activeSection !==
@@ -1931,12 +2374,11 @@ async function loadGallery() {
     );
 
 
-    gallery.innerHTML =
-      `
-        <div class="empty">
-          couldn't load memories ♡
-        </div>
-      `;
+    gallery.innerHTML = `
+      <div class="empty">
+        couldn't load memories ♡
+      </div>
+    `;
 
 
     return;
@@ -1953,12 +2395,11 @@ async function loadGallery() {
     data.length === 0
   ) {
 
-    gallery.innerHTML =
-      `
-        <div class="empty">
-          no memories here yet ♡
-        </div>
-      `;
+    gallery.innerHTML = `
+      <div class="empty">
+        no memories here yet ♡
+      </div>
+    `;
 
 
     return;
@@ -1966,11 +2407,13 @@ async function loadGallery() {
   }
 
 
-  /* -------------------------------------------------------
-     CREATE EACH CARD
-     ------------------------------------------------------- */
+  const memories =
+    sortMemories(
+      data
+    );
 
-  data.forEach(
+
+  memories.forEach(
     item => {
 
       const card =
@@ -1999,9 +2442,9 @@ async function loadGallery() {
         );
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          IMAGE
-         --------------------------------------------------- */
+         ================================================= */
 
       if (
         item.type ===
@@ -2029,37 +2472,35 @@ async function loadGallery() {
             : "Gallery photo";
 
 
-        /*
-          If the file can't be loaded,
-          hide only this image rather
-          than breaking the whole gallery.
-        */
+        image.src =
+          url;
+
 
         image.addEventListener(
           "error",
           () => {
 
-            media.innerHTML =
-              `
-                <div
-                  style="
-                    padding:30px;
-                    text-align:center;
-                    color:#a08b94;
-                    font-size:12px;
-                  "
-                >
-                  photo unavailable ♡
-                </div>
-              `;
+            media.innerHTML = `
+              <div
+                style="
+                  padding:30px;
+                  text-align:center;
+                  color:#a08b94;
+                  font-size:12px;
+                "
+              >
+                photo unavailable ♡
+              </div>
+            `;
 
           }
         );
 
 
-        image.src =
-          url;
-
+        /*
+          Photos open in the
+          lightbox when clicked.
+        */
 
         image.addEventListener(
           "click",
@@ -2095,9 +2536,9 @@ async function loadGallery() {
       }
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          VIDEO
-         --------------------------------------------------- */
+         ================================================= */
 
       else if (
         item.type ===
@@ -2130,19 +2571,18 @@ async function loadGallery() {
           "error",
           () => {
 
-            media.innerHTML =
-              `
-                <div
-                  style="
-                    padding:30px;
-                    text-align:center;
-                    color:#a08b94;
-                    font-size:12px;
-                  "
-                >
-                  video unavailable ♡
-                </div>
-              `;
+            media.innerHTML = `
+              <div
+                style="
+                  padding:30px;
+                  text-align:center;
+                  color:#a08b94;
+                  font-size:12px;
+                "
+              >
+                video unavailable ♡
+              </div>
+            `;
 
           }
         );
@@ -2160,13 +2600,26 @@ async function loadGallery() {
       );
 
 
-      /* ---------------------------------------------------
-         OPTIONAL DATE
-         --------------------------------------------------- */
+      /* =================================================
+         INFORMATION
+         ================================================= */
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+
+      info.className =
+        "memory-info";
+
+
+      /*
+        DATE
+      */
 
       if (
-        item.date &&
-        item.date.trim()
+        item.memory_date
       ) {
 
         const date =
@@ -2180,22 +2633,58 @@ async function loadGallery() {
 
 
         date.textContent =
-          item.date;
+          formatDate(
+            item.memory_date
+          );
 
 
-        card.appendChild(
+        info.appendChild(
           date
         );
 
       }
 
 
-      /* ---------------------------------------------------
-         OPTIONAL CAPTION
+      /*
+        LOCATION
 
-         Nothing is displayed if
-         caption is empty.
-         --------------------------------------------------- */
+        Only displayed if
+        the user entered one.
+      */
+
+      if (
+        item.location &&
+        item.location.trim()
+      ) {
+
+        const location =
+          document.createElement(
+            "div"
+          );
+
+
+        location.className =
+          "location";
+
+
+        location.textContent =
+          "📍 " +
+          item.location;
+
+
+        info.appendChild(
+          location
+        );
+
+      }
+
+
+      /*
+        CAPTION
+
+        Only displayed if
+        the user entered one.
+      */
 
       if (
         item.caption &&
@@ -2216,18 +2705,34 @@ async function loadGallery() {
           item.caption;
 
 
-        card.appendChild(
+        info.appendChild(
           caption
         );
 
       }
 
 
-      /* ---------------------------------------------------
-         DELETE BUTTON
+      /*
+        Only add the info container
+        if it actually contains
+        something.
+      */
 
-         Only visible to admin.
-         --------------------------------------------------- */
+      if (
+        info.children.length >
+        0
+      ) {
+
+        card.appendChild(
+          info
+        );
+
+      }
+
+
+      /* =================================================
+         ADMIN DELETE
+         ================================================= */
 
       const actions =
         document.createElement(
@@ -2292,7 +2797,8 @@ async function deleteMemory(
 
   if (
     !currentUser ||
-    currentUser.id !== ADMIN_UID
+    currentUser.id !==
+    ADMIN_UID
   ) {
 
     return;
@@ -2312,7 +2818,7 @@ async function deleteMemory(
 
 
   const {
-    error: dbError
+    error
   } =
     await supabaseClient
       .from("memories")
@@ -2323,16 +2829,16 @@ async function deleteMemory(
       );
 
 
-  if (dbError) {
+  if (error) {
 
     alert(
       "Couldn't delete the memory ♡\n\n" +
-      dbError.message
+      error.message
     );
 
 
     console.error(
-      dbError
+      error
     );
 
 
@@ -2341,7 +2847,9 @@ async function deleteMemory(
   }
 
 
-  if (item.file_path) {
+  if (
+    item.file_path
+  ) {
 
     await supabaseClient
       .storage
@@ -2394,7 +2902,8 @@ document
 
       if (
         !currentUser ||
-        currentUser.id !== ADMIN_UID
+        currentUser.id !==
+        ADMIN_UID
       ) {
 
         return;
@@ -2437,9 +2946,9 @@ document
         "saving... ♡";
 
 
-      /* ---------------------------------------------------
-         DETERMINE TYPE
-         --------------------------------------------------- */
+      /* =================================================
+         TYPE
+         ================================================= */
 
       const type =
         file.type.startsWith(
@@ -2449,12 +2958,9 @@ document
           : "image";
 
 
-      /* ---------------------------------------------------
-         CLEAN FILE NAME
-
-         This handles spaces and
-         special characters safely.
-         --------------------------------------------------- */
+      /* =================================================
+         SAFE FILE NAME
+         ================================================= */
 
       const cleanName =
         file.name
@@ -2475,12 +2981,13 @@ document
         `${crypto.randomUUID()}-${cleanName}`;
 
 
-      /* ---------------------------------------------------
-         UPLOAD FILE
-         --------------------------------------------------- */
+      /* =================================================
+         UPLOAD
+         ================================================= */
 
       const {
-        error: uploadError
+        error:
+          uploadError
       } =
         await supabaseClient
           .storage
@@ -2522,9 +3029,11 @@ document
       }
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          DATE
-         --------------------------------------------------- */
+
+         Keep the real date in memory_date.
+         ================================================= */
 
       const dateInput =
         document
@@ -2534,37 +3043,22 @@ document
           .value;
 
 
-      let date =
-        "";
+      /* =================================================
+         LOCATION
+         ================================================= */
 
-
-      if (dateInput) {
-
-        date =
-          new Date(
-            dateInput +
-            "T00:00:00"
+      const location =
+        document
+          .getElementById(
+            "memoryLocation"
           )
-            .toLocaleDateString(
-              undefined,
-              {
-                year:
-                  "numeric",
-
-                month:
-                  "long",
-
-                day:
-                  "numeric"
-              }
-            );
-
-      }
+          .value
+          .trim();
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          SECTION
-         --------------------------------------------------- */
+         ================================================= */
 
       const album =
         document
@@ -2574,9 +3068,9 @@ document
           .value;
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          CAPTION
-         --------------------------------------------------- */
+         ================================================= */
 
       const caption =
         document
@@ -2587,26 +3081,60 @@ document
           .trim();
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          DATABASE RECORD
-         --------------------------------------------------- */
+
+         IMPORTANT:
+         memory_date is the DATE column.
+         location is the LOCATION column.
+         ================================================= */
 
       const {
-        error: dbError
+        error:
+          dbError
       } =
         await supabaseClient
           .from("memories")
           .insert({
+
             type,
+
             file_path:
               path,
+
             album,
-            date,
+
+            memory_date:
+              dateInput ||
+              null,
+
+            /*
+              Keep the old date column
+              updated too, so older parts
+              of the gallery don't lose it.
+            */
+
+            date:
+              dateInput
+              ? formatDate(
+                  dateInput
+                )
+              : "",
+
+            location,
+
             caption
+
           });
 
 
       if (dbError) {
+
+        /*
+          If the database insert fails,
+          remove the uploaded file so
+          we don't leave an orphaned file.
+        */
 
         await supabaseClient
           .storage
@@ -2635,9 +3163,9 @@ document
       }
 
 
-      /* ---------------------------------------------------
+      /* =================================================
          RESET FORM
-         --------------------------------------------------- */
+         ================================================= */
 
       document
         .getElementById(
@@ -2650,6 +3178,14 @@ document
       document
         .getElementById(
           "memoryDate"
+        )
+        .value =
+        "";
+
+
+      document
+        .getElementById(
+          "memoryLocation"
         )
         .value =
         "";
@@ -2716,7 +3252,8 @@ document
 
       if (
         !currentUser ||
-        currentUser.id !== ADMIN_UID
+        currentUser.id !==
+        ADMIN_UID
       ) {
 
         return;
@@ -2753,11 +3290,6 @@ document
 
       }
 
-
-      /*
-        Prevent accidentally creating
-        another "all memories ♡".
-      */
 
       if (
         title
@@ -2796,8 +3328,11 @@ document
         await supabaseClient
           .from("sections")
           .insert({
+
             title,
+
             subtitle
+
           });
 
 
@@ -2850,7 +3385,7 @@ document
 
 
 /* =========================================================
-   LIGHTBOX CLOSE
+   LIGHTBOX
    ========================================================= */
 
 document
@@ -2913,7 +3448,7 @@ document
 
 
 /* =========================================================
-   ESCAPE KEY
+   ESCAPE
    ========================================================= */
 
 document.addEventListener(
@@ -2945,13 +3480,13 @@ document.addEventListener(
 
 
 /* =========================================================
-   START GALLERY
+   START
    ========================================================= */
 
 async function start() {
 
   /*
-    Check if you're already logged in.
+    Check existing login.
   */
 
   const {
@@ -2968,7 +3503,8 @@ async function start() {
 
 
   /*
-    Only your account gets admin controls.
+    Only your account gets
+    admin functionality.
   */
 
   if (
@@ -2999,12 +3535,14 @@ async function start() {
 
 
 /* =========================================================
-   RUN
+   START GALLERY
    ========================================================= */
 
 start();
 
 </script>
 
+
 </body>
+
 </html>
