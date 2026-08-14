@@ -1,1165 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>my gallery ♡</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <style>
-
-/* =========================================================
-   COLORS
-   ========================================================= */
-
 :root {
-
   --pink: #f5dce5;
   --pink-soft: #fff7fa;
   --pink-border: #efd5df;
-
   --text: #654f59;
   --muted: #a08b94;
-
   --white: #ffffff;
-
-  --shadow:
-    0 7px 22px rgba(100, 70, 85, 0.08);
-
+  --shadow: 0 7px 22px rgba(100, 70, 85, 0.08);
 }
-
-
-/* =========================================================
-   RESET
-   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
-
 html {
   scroll-behavior: smooth;
 }
 
-
 body {
-
   margin: 0;
-
   background:
-    radial-gradient(
-      circle at 10% 0%,
-      #fcebf1,
-      transparent 28%
-    ),
-    linear-gradient(
-      #fffafd,
-      #ffffff
-    );
-
+    radial-gradient(circle at 10% 0%, #fcebf1, transparent 28%),
+    linear-gradient(#fffafd, #ffffff);
   color: var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
-  overflow-x: hidden;
-
 }
-
-
-/* =========================================================
-   PAGE
-   ========================================================= */
 
 .page {
-
   width: 100%;
-
   max-width: 1500px;
-
   margin: 0 auto;
-
-  padding:
-    28px
-    clamp(10px, 3vw, 32px)
-    60px;
-
+  padding: 28px clamp(10px, 3vw, 32px) 60px;
 }
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
+/* HEADER */
 
 .header {
-
   text-align: center;
-
-  padding:
-    8px
-    10px
-    20px;
-
+  padding: 8px 10px 20px;
 }
-
 
 .header h1 {
-
   margin: 0;
-
   font-family: Georgia, serif;
-
   font-weight: 500;
-
-  font-size:
-    clamp(30px, 4vw, 46px);
-
+  font-size: clamp(30px, 4vw, 46px);
 }
-
 
 .header p {
-
-  margin:
-    7px
-    0
-    0;
-
+  margin: 7px 0 0;
   color: var(--muted);
-
   font-size: 13px;
-
   letter-spacing: .04em;
-
 }
 
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* BUTTONS */
 
 .actions {
-
   display: flex;
-
   justify-content: center;
-
   flex-wrap: wrap;
-
   gap: 8px;
-
   margin-bottom: 18px;
-
 }
-
 
 .button {
-
-  border:
-    1px solid
-    var(--pink-border);
-
+  border: 1px solid var(--pink-border);
   border-radius: 999px;
-
-  padding:
-    9px
-    16px;
-
+  padding: 9px 16px;
   background: var(--pink);
-
   color: #765766;
-
   cursor: pointer;
-
   font-size: 13px;
-
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease;
-
+  transition: transform .15s ease, box-shadow .15s ease;
 }
-
 
 .button:hover {
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    0 5px 15px
-    rgba(100,70,85,.08);
-
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(100,70,85,.08);
 }
-
 
 .button:disabled {
-
   opacity: .6;
-
   cursor: not-allowed;
-
 }
-
 
 .admin-only {
   display: none;
 }
 
-
-/* =========================================================
-   SECTION NAVIGATION
-   ========================================================= */
+/* SECTION NAVIGATION */
 
 .section-nav {
-
   display: flex;
-
   justify-content: center;
-
   flex-wrap: wrap;
-
   gap: 7px;
-
   margin-bottom: 18px;
-
 }
 
-
-.section-nav button {
-
-  border:
-    1px solid
-    var(--pink-border);
-
+.section-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--pink-border);
   border-radius: 999px;
-
-  padding:
-    7px
-    13px;
-
+  padding: 7px 9px 7px 13px;
   background: white;
-
   color: var(--muted);
-
-  cursor: pointer;
-
   font-size: 12px;
-
 }
 
-
-.section-nav button:hover {
-
-  background:
-    var(--pink-soft);
-
+.section-tab.active {
+  background: var(--pink-soft);
+  color: var(--text);
+  border-color: #dcaabb;
 }
 
-
-.section-nav button.active {
-
-  background:
-    var(--pink-soft);
-
-  color:
-    var(--text);
-
-  border-color:
-    #dcaabb;
-
+.section-select-button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
 }
 
+.delete-section-button {
+  border: 0;
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #b28c99;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 21px;
+}
 
-/* =========================================================
-   SORT
-   ========================================================= */
+.delete-section-button:hover {
+  background: #f9e4eb;
+  color: #9a536b;
+}
+
+/* SORT */
 
 .sort-row {
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 7px;
-
   margin-bottom: 25px;
-
   color: var(--muted);
-
   font-size: 12px;
-
 }
-
 
 .sort-row select {
-
   width: auto;
-
   min-width: 150px;
-
-  padding:
-    7px
-    12px;
-
+  padding: 7px 12px;
 }
 
-
-/* =========================================================
-   SECTION HEADING
-   ========================================================= */
+/* HEADING */
 
 .section-heading {
-
   text-align: center;
-
   margin-bottom: 18px;
-
 }
-
 
 .section-heading h2 {
-
   margin: 0;
-
   font-family: Georgia, serif;
-
   font-size: 23px;
-
   font-weight: 500;
-
 }
-
 
 .section-heading p {
-
-  margin:
-    5px
-    0
-    0;
-
+  margin: 5px 0 0;
   color: var(--muted);
-
   font-size: 12px;
-
   white-space: pre-wrap;
-
   overflow-wrap: anywhere;
-
 }
 
-
-/* =========================================================
-   GALLERY
-   ========================================================= */
+/* GALLERY */
 
 .gallery {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(0, 1fr)
-    );
-
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
-
-  gap:
-    clamp(
-      10px,
-      1.4vw,
-      18px
-    );
-
+  gap: clamp(10px, 1.4vw, 18px);
   width: 100%;
-
 }
-
-
-/* =========================================================
-   CARD
-   ========================================================= */
 
 .card {
-
   width: 100%;
-
   min-width: 0;
-
-  background:
-    var(--white);
-
-  border:
-    1px solid
-    rgba(
-      239,
-      213,
-      223,
-      .6
-    );
-
+  background: var(--white);
+  border: 1px solid rgba(239, 213, 223, .6);
   border-radius: 18px;
-
   overflow: hidden;
-
-  box-shadow:
-    var(--shadow);
-
+  box-shadow: var(--shadow);
   align-self: start;
-
 }
-
-
-/* =========================================================
-   MEDIA
-   ========================================================= */
 
 .media {
-
   width: 100%;
-
   overflow: hidden;
-
-  background:
-    #fff;
-
+  background: #fff;
 }
-
-
-/*
-  PHOTOS
-
-  No fixed height.
-  No cropping.
-  Natural aspect ratio.
-
-  The image can remain at its natural
-  dimensions when it fits the card.
-
-  max-width prevents horizontal scrolling.
-*/
 
 .media img {
-
   display: block;
-
   width: auto;
-
   height: auto;
-
   max-width: 100%;
-
-  margin:
-    0 auto;
-
+  margin: 0 auto;
   cursor: zoom-in;
-
 }
-
-
-/*
-  VIDEOS
-
-  Videos remain responsive and
-  have native controls.
-*/
 
 .media video {
-
   display: block;
-
   width: 100%;
-
   height: auto;
-
   max-width: 100%;
-
   background: #000;
-
 }
 
-
-/* =========================================================
-   INFO
-   ========================================================= */
+/* INFO */
 
 .memory-info {
-
-  padding:
-    11px
-    13px
-    13px;
-
+  padding: 11px 13px 13px;
 }
-
-
-/* DATE */
 
 .date {
-
   color: var(--muted);
-
   font-size: 10px;
-
   text-transform: uppercase;
-
   letter-spacing: .07em;
-
   margin-bottom: 5px;
-
 }
-
-
-/* LOCATION */
 
 .location {
-
   color: #9b7784;
-
   font-size: 11px;
-
   margin-bottom: 6px;
-
 }
-
-
-/* CAPTION */
 
 .caption {
-
   font-family: Georgia, serif;
-
   font-size: 14px;
-
   line-height: 1.5;
-
   white-space: pre-wrap;
-
   overflow-wrap: anywhere;
-
 }
 
-
-/* =========================================================
-   DELETE
-   ========================================================= */
+/* DELETE MEMORY */
 
 .card-actions {
-
   display: none;
-
   justify-content: flex-end;
-
-  padding:
-    0
-    10px
-    10px;
-
+  padding: 0 10px 10px;
 }
 
-
-body.admin-mode
-.card-actions {
-
+body.admin-mode .card-actions {
   display: flex;
-
 }
-
 
 .delete-button {
-
   border: 0;
-
-  background:
-    transparent;
-
-  color:
-    var(--muted);
-
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
-
   font-size: 11px;
-
 }
-
 
 .delete-button:hover {
-
-  color:
-    #9b596e;
-
+  color: #9b596e;
 }
 
-
-/* =========================================================
-   EMPTY
-   ========================================================= */
+/* EMPTY */
 
 .empty {
-
-  grid-column:
-    1 / -1;
-
-  padding:
-    50px
-    20px;
-
+  grid-column: 1 / -1;
+  padding: 50px 20px;
   text-align: center;
-
-  color:
-    var(--muted);
-
-  font-family:
-    Georgia,
-    serif;
-
+  color: var(--muted);
+  font-family: Georgia, serif;
 }
 
-
-/* =========================================================
-   MODALS
-   ========================================================= */
+/* MODALS */
 
 .modal,
 .lightbox {
-
   position: fixed;
-
   inset: 0;
-
   z-index: 1000;
-
   display: none;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 20px;
-
-  background:
-    rgba(
-      45,
-      30,
-      37,
-      .58
-    );
-
-  backdrop-filter:
-    blur(5px);
-
+  background: rgba(45, 30, 37, .58);
+  backdrop-filter: blur(5px);
 }
-
 
 .modal.open,
 .lightbox.open {
-
   display: flex;
-
 }
-
 
 .modal-box {
-
   position: relative;
-
-  width:
-    min(
-      480px,
-      100%
-    );
-
-  max-height:
-    90vh;
-
-  overflow-y:
-    auto;
-
-  padding:
-    24px;
-
-  background:
-    white;
-
-  border-radius:
-    22px;
-
-  box-shadow:
-    0 25px 80px
-    rgba(0,0,0,.2);
-
+  width: min(480px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 25px 80px rgba(0,0,0,.2);
 }
-
 
 .modal-box h2 {
-
-  margin:
-    0
-    0
-    5px;
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-weight:
-    500;
-
+  margin: 0 0 5px;
+  font-family: Georgia, serif;
+  font-weight: 500;
 }
-
 
 .modal-subtitle {
-
-  margin:
-    0
-    0
-    20px;
-
-  color:
-    var(--muted);
-
-  font-size:
-    12px;
-
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 12px;
 }
-
 
 .close {
-
-  position:
-    absolute;
-
-  top:
-    12px;
-
-  right:
-    15px;
-
-  width:
-    34px;
-
-  height:
-    34px;
-
-  border:
-    0;
-
-  border-radius:
-    50%;
-
-  background:
-    var(--pink-soft);
-
-  color:
-    var(--text);
-
-  font-size:
-    20px;
-
-  cursor:
-    pointer;
-
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
 }
 
-
-/* =========================================================
-   FORM
-   ========================================================= */
+/* FORM */
 
 .form-group {
-
-  margin-bottom:
-    15px;
-
+  margin-bottom: 15px;
 }
-
 
 .form-group label {
-
-  display:
-    block;
-
-  margin-bottom:
-    6px;
-
-  font-size:
-    12px;
-
-  font-weight:
-    600;
-
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
 }
-
 
 input,
 select,
 textarea {
-
-  width:
-    100%;
-
-  border:
-    1px solid
-    var(--pink-border);
-
-  border-radius:
-    12px;
-
-  padding:
-    10px
-    12px;
-
-  background:
-    #fffafb;
-
-  color:
-    var(--text);
-
-  font:
-    inherit;
-
-  font-size:
-    13px;
-
+  width: 100%;
+  border: 1px solid var(--pink-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fffafb;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
 }
-
 
 textarea {
-
-  min-height:
-    90px;
-
-  resize:
-    vertical;
-
+  min-height: 90px;
+  resize: vertical;
 }
-
 
 .submit {
-
-  width:
-    100%;
-
-  border:
-    0;
-
-  border-radius:
-    999px;
-
-  padding:
-    11px;
-
-  background:
-    var(--pink);
-
-  color:
-    #765766;
-
-  cursor:
-    pointer;
-
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  padding: 11px;
+  background: var(--pink);
+  color: #765766;
+  cursor: pointer;
 }
-
 
 .submit:disabled {
-
-  opacity:
-    .6;
-
-  cursor:
-    not-allowed;
-
+  opacity: .6;
+  cursor: not-allowed;
 }
-
 
 .status {
-
-  display:
-    none;
-
-  padding:
-    9px;
-
-  margin-bottom:
-    14px;
-
-  border-radius:
-    10px;
-
-  background:
-    var(--pink-soft);
-
-  color:
-    var(--muted);
-
-  font-size:
-    12px;
-
+  display: none;
+  padding: 9px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: var(--pink-soft);
+  color: var(--muted);
+  font-size: 12px;
 }
 
-
-/* =========================================================
-   LIGHTBOX
-   ========================================================= */
+/* LIGHTBOX */
 
 .lightbox img {
-
-  display:
-    block;
-
-  max-width:
-    94vw;
-
-  max-height:
-    90vh;
-
-  width:
-    auto;
-
-  height:
-    auto;
-
-  border-radius:
-    18px;
-
-  box-shadow:
-    0 20px 80px
-    rgba(0,0,0,.3);
-
+  display: block;
+  max-width: 94vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 20px 80px rgba(0,0,0,.3);
 }
-
 
 .lightbox .close {
-
-  position:
-    fixed;
-
-  top:
-    15px;
-
-  right:
-    18px;
-
+  position: fixed;
+  top: 15px;
+  right: 18px;
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
+/* MOBILE */
 
 @media (max-width: 900px) {
-
   .gallery {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
-
 
 @media (max-width: 520px) {
-
   .page {
-
-    padding-left:
-      9px;
-
-    padding-right:
-      9px;
-
+    padding-left: 9px;
+    padding-right: 9px;
   }
-
 
   .gallery {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    gap:
-      9px;
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
   }
-
 
   .card {
-
-    border-radius:
-      14px;
-
+    border-radius: 14px;
   }
-
 
   .memory-info {
-
-    padding:
-      9px
-      10px
-      11px;
-
+    padding: 9px 10px 11px;
   }
-
 
   .caption {
-
-    font-size:
-      13px;
-
+    font-size: 13px;
   }
-
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <main class="page">
 
-
-<!-- =======================================================
-     HEADER
-
-     CHANGE YOUR TITLE/SUBTITLE HERE
-     ======================================================= -->
-
 <header class="header">
-
-  <h1>
-    my gallery ♡
-  </h1>
-
-  <p>
-    photos, videos &amp; little memories
-  </p>
-
+  <h1>my gallery ♡</h1>
+  <p>photos, videos &amp; little memories</p>
 </header>
-
-
-<!-- =======================================================
-     BUTTONS
-     ======================================================= -->
 
 <div class="actions">
 
-  <button
-    class="button"
-    id="adminButton">
-
+  <button class="button" id="adminButton">
     🔒 admin
-
   </button>
 
-
-  <button
-    class="button admin-only"
-    id="logoutButton">
-
+  <button class="button admin-only" id="logoutButton">
     log out
-
   </button>
 
-
-  <button
-    class="button admin-only"
-    id="addMemoryButton">
-
+  <button class="button admin-only" id="addMemoryButton">
     ＋ add a little memory
-
   </button>
 
-
-  <button
-    class="button admin-only"
-    id="newSectionButton">
-
+  <button class="button admin-only" id="newSectionButton">
     ＋ new section
-
   </button>
 
 </div>
 
+<nav class="section-nav" id="sectionNav"></nav>
 
-<!-- =======================================================
-     SECTIONS
-     ======================================================= -->
-
-<nav
-  class="section-nav"
-  id="sectionNav">
-</nav>
-
-
-<!-- =======================================================
-     SECTION HEADING
-     ======================================================= -->
-
-<div
-  class="section-heading"
-  id="sectionHeading">
-</div>
-
-
-<!-- =======================================================
-     SORTING
-     ======================================================= -->
+<div class="section-heading" id="sectionHeading"></div>
 
 <div class="sort-row">
 
-  <span>
-    sort by
-  </span>
+  <span>sort by</span>
 
   <select id="sortSelect">
-
-    <option value="newest">
-      newest first
-    </option>
-
-    <option value="oldest">
-      oldest first
-    </option>
-
-    <option value="added">
-      recently added
-    </option>
-
+    <option value="newest">newest first</option>
+    <option value="oldest">oldest first</option>
+    <option value="added">recently added</option>
   </select>
 
 </div>
 
-
-<!-- =======================================================
-     GALLERY
-     ======================================================= -->
-
-<section
-  class="gallery"
-  id="gallery">
+<section class="gallery" id="gallery">
 
   <div class="empty">
     loading memories ♡
@@ -1167,51 +521,30 @@ textarea {
 
 </section>
 
-
 </main>
 
 
+<!-- LOGIN -->
 
-<!-- =======================================================
-     LOGIN MODAL
-     ======================================================= -->
-
-<div
-  class="modal"
-  id="loginModal">
+<div class="modal" id="loginModal">
 
   <div class="modal-box">
 
-    <button
-      class="close"
-      data-close="loginModal">
-
+    <button class="close" data-close="loginModal">
       ×
-
     </button>
 
-
-    <h2>
-      admin ♡
-    </h2>
-
+    <h2>admin ♡</h2>
 
     <p class="modal-subtitle">
       log in to manage your memories
     </p>
 
-
-    <div
-      class="status"
-      id="loginStatus">
-    </div>
-
+    <div class="status" id="loginStatus"></div>
 
     <div class="form-group">
 
-      <label>
-        Email
-      </label>
+      <label>Email</label>
 
       <input
         id="email"
@@ -1221,12 +554,9 @@ textarea {
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Password
-      </label>
+      <label>Password</label>
 
       <input
         id="password"
@@ -1236,13 +566,8 @@ textarea {
 
     </div>
 
-
-    <button
-      class="submit"
-      id="loginSubmit">
-
+    <button class="submit" id="loginSubmit">
       log in ♡
-
     </button>
 
   </div>
@@ -1250,41 +575,25 @@ textarea {
 </div>
 
 
+<!-- ADD MEMORY -->
 
-<!-- =======================================================
-     ADD MEMORY MODAL
-     ======================================================= -->
-
-<div
-  class="modal"
-  id="memoryModal">
+<div class="modal" id="memoryModal">
 
   <div class="modal-box">
 
-    <button
-      class="close"
-      data-close="memoryModal">
-
+    <button class="close" data-close="memoryModal">
       ×
-
     </button>
 
-
-    <h2>
-      add a little memory ♡
-    </h2>
-
+    <h2>add a little memory ♡</h2>
 
     <p class="modal-subtitle">
       add a photo or video
     </p>
 
-
     <div class="form-group">
 
-      <label>
-        Photo or video
-      </label>
+      <label>Photo or video</label>
 
       <input
         id="file"
@@ -1293,24 +602,17 @@ textarea {
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Section
-      </label>
+      <label>Section</label>
 
-      <select id="memorySection">
-      </select>
+      <select id="memorySection"></select>
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Date — optional
-      </label>
+      <label>Date — optional</label>
 
       <input
         id="memoryDate"
@@ -1318,12 +620,9 @@ textarea {
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Location — optional
-      </label>
+      <label>Location — optional</label>
 
       <input
         id="memoryLocation"
@@ -1332,27 +631,18 @@ textarea {
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Caption — optional
-      </label>
+      <label>Caption — optional</label>
 
       <textarea
         id="memoryCaption"
-        placeholder="a little memory ♡">
-      </textarea>
+        placeholder="a little memory ♡"></textarea>
 
     </div>
 
-
-    <button
-      class="submit"
-      id="saveMemory">
-
+    <button class="submit" id="saveMemory">
       add memory ♡
-
     </button>
 
   </div>
@@ -1360,41 +650,25 @@ textarea {
 </div>
 
 
+<!-- NEW SECTION -->
 
-<!-- =======================================================
-     NEW SECTION MODAL
-     ======================================================= -->
-
-<div
-  class="modal"
-  id="sectionModal">
+<div class="modal" id="sectionModal">
 
   <div class="modal-box">
 
-    <button
-      class="close"
-      data-close="sectionModal">
-
+    <button class="close" data-close="sectionModal">
       ×
-
     </button>
 
-
-    <h2>
-      new section ♡
-    </h2>
-
+    <h2>new section ♡</h2>
 
     <p class="modal-subtitle">
       create a new album for your memories
     </p>
 
-
     <div class="form-group">
 
-      <label>
-        Section name
-      </label>
+      <label>Section name</label>
 
       <input
         id="sectionName"
@@ -1402,27 +676,18 @@ textarea {
 
     </div>
 
-
     <div class="form-group">
 
-      <label>
-        Subtitle — optional
-      </label>
+      <label>Subtitle — optional</label>
 
       <textarea
         id="sectionSubtitle"
-        placeholder="sunny days & little adventures">
-      </textarea>
+        placeholder="sunny days & little adventures"></textarea>
 
     </div>
 
-
-    <button
-      class="submit"
-      id="saveSection">
-
+    <button class="submit" id="saveSection">
       create section ♡
-
     </button>
 
   </div>
@@ -1430,50 +695,31 @@ textarea {
 </div>
 
 
+<!-- LIGHTBOX -->
 
-<!-- =======================================================
-     LIGHTBOX
-     ======================================================= -->
+<div class="lightbox" id="lightbox">
 
-<div
-  class="lightbox"
-  id="lightbox">
-
-  <button
-    class="close"
-    id="closeLightbox">
-
+  <button class="close" id="closeLightbox">
     ×
-
   </button>
 
-
-  <img
-    id="lightboxImage"
-    alt="">
+  <img id="lightboxImage" alt="">
 
 </div>
-
 
 
 <script>
 
 /* =========================================================
-   =========================================================
-
-   SUPABASE SETTINGS
-
-   PUT YOUR REAL PUBLISHABLE / ANON KEY HERE.
-
-   DO NOT USE A SERVICE_ROLE SECRET KEY.
-
-   =========================================================
+   SUPABASE
    ========================================================= */
 
 const SUPABASE_URL =
   "https://jhdjzuneqtmtglindcia.supabase.co";
 
-
+/*
+  KEEP YOUR EXISTING WORKING KEY HERE.
+*/
 const SUPABASE_KEY =
   "sb_publishable_SadDNJrtj5XnMUDKB0vr4Q_NBgu1PXK";
 
@@ -1486,7 +732,7 @@ const supabaseClient =
 
 
 /* =========================================================
-   ADMIN ACCOUNT
+   ADMIN
    ========================================================= */
 
 const ADMIN_UID =
@@ -1497,21 +743,17 @@ const ADMIN_UID =
    STATE
    ========================================================= */
 
-let currentUser =
-  null;
+let currentUser = null;
 
-let sections =
-  [];
+let sections = [];
 
-let activeSection =
-  "all";
+let activeSection = "all";
 
-let currentSort =
-  "newest";
+let currentSort = "newest";
 
 
 /* =========================================================
-   MODAL HELPERS
+   MODALS
    ========================================================= */
 
 function openModal(id) {
@@ -1534,10 +776,6 @@ function closeModal(id) {
 }
 
 
-/* =========================================================
-   CLOSE BUTTONS
-   ========================================================= */
-
 document
   .querySelectorAll("[data-close]")
   .forEach(button => {
@@ -1557,7 +795,7 @@ document
 
 
 /* =========================================================
-   ADMIN BUTTON
+   ADMIN LOGIN
    ========================================================= */
 
 document
@@ -1566,21 +804,15 @@ document
     "click",
     () => {
 
-      if (currentUser) {
-        return;
-      }
+      if (!currentUser) {
 
-      openModal(
-        "loginModal"
-      );
+        openModal("loginModal");
+
+      }
 
     }
   );
 
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
 
 document
   .getElementById("loginSubmit")
@@ -1594,28 +826,25 @@ document
           .value
           .trim();
 
-
       const password =
         document
           .getElementById("password")
           .value;
 
-
       const status =
         document
-          .getElementById(
-            "loginStatus"
-          );
+          .getElementById("loginStatus");
+
+      const button =
+        document
+          .getElementById("loginSubmit");
 
 
       status.style.display =
         "none";
 
 
-      if (
-        !email ||
-        !password
-      ) {
+      if (!email || !password) {
 
         status.textContent =
           "Please enter your email and password ♡";
@@ -1628,15 +857,7 @@ document
       }
 
 
-      const button =
-        document
-          .getElementById(
-            "loginSubmit"
-          );
-
-
-      button.disabled =
-        true;
+      button.disabled = true;
 
       button.textContent =
         "logging in...";
@@ -1654,8 +875,7 @@ document
           });
 
 
-      button.disabled =
-        false;
+      button.disabled = false;
 
       button.textContent =
         "log in ♡";
@@ -1676,14 +896,12 @@ document
 
       if (
         !data.user ||
-        data.user.id !==
-        ADMIN_UID
+        data.user.id !== ADMIN_UID
       ) {
 
         await supabaseClient
           .auth
           .signOut();
-
 
         status.textContent =
           "This account isn't the gallery admin ♡";
@@ -1707,6 +925,8 @@ document
 
       updateAdminUI();
 
+      renderSectionNavigation();
+
     }
   );
 
@@ -1725,12 +945,11 @@ document
         .auth
         .signOut();
 
-
-      currentUser =
-        null;
-
+      currentUser = null;
 
       updateAdminUI();
+
+      renderSectionNavigation();
 
     }
   );
@@ -1742,21 +961,22 @@ document
 
 function updateAdminUI() {
 
-  const adminElements =
-    document
-      .querySelectorAll(
-        ".admin-only"
-      );
+  const isAdmin =
+    Boolean(
+      currentUser &&
+      currentUser.id === ADMIN_UID
+    );
 
 
-  adminElements
+  document.body.classList.toggle(
+    "admin-mode",
+    isAdmin
+  );
+
+
+  document
+    .querySelectorAll(".admin-only")
     .forEach(element => {
-
-      const isAdmin =
-        currentUser &&
-        currentUser.id ===
-        ADMIN_UID;
-
 
       element.style.display =
         isAdmin
@@ -1764,12 +984,6 @@ function updateAdminUI() {
           : "none";
 
     });
-
-
-  document.body.classList.toggle(
-    "admin-mode",
-    Boolean(currentUser)
-  );
 
 }
 
@@ -1802,20 +1016,14 @@ async function loadSections() {
       error
     );
 
+    sections = [];
+
+  } else {
+
     sections =
-      [];
-
-    renderSectionNavigation();
-
-    renderSectionSelect();
-
-    return;
+      data || [];
 
   }
-
-
-  sections =
-    data || [];
 
 
   renderSectionNavigation();
@@ -1838,11 +1046,25 @@ function renderSectionNavigation() {
       );
 
 
-  nav.innerHTML =
-    "";
+  nav.innerHTML = "";
 
 
-  /* BUILT-IN ALL MEMORIES */
+  /* ALL MEMORIES */
+
+  const allTab =
+    document.createElement(
+      "div"
+    );
+
+
+  allTab.className =
+    "section-tab" +
+    (
+      activeSection === "all"
+        ? " active"
+        : ""
+    );
+
 
   const allButton =
     document.createElement(
@@ -1850,15 +1072,12 @@ function renderSectionNavigation() {
     );
 
 
+  allButton.className =
+    "section-select-button";
+
+
   allButton.textContent =
     "all memories ♡";
-
-
-  allButton.classList.toggle(
-    "active",
-    activeSection ===
-    "all"
-  );
 
 
   allButton.addEventListener(
@@ -1868,7 +1087,6 @@ function renderSectionNavigation() {
       activeSection =
         "all";
 
-
       renderSectionNavigation();
 
       loadGallery();
@@ -1877,16 +1095,17 @@ function renderSectionNavigation() {
   );
 
 
-  nav.appendChild(
+  allTab.appendChild(
     allButton
   );
 
 
-  /*
-    Don't display a duplicate
-    database section called
-    "all memories ♡".
-  */
+  nav.appendChild(
+    allTab
+  );
+
+
+  /* SECTIONS */
 
   sections
     .filter(
@@ -1899,30 +1118,41 @@ function renderSectionNavigation() {
     .forEach(
       section => {
 
-        const button =
+        const tab =
+          document.createElement(
+            "div"
+          );
+
+
+        tab.className =
+          "section-tab" +
+          (
+            activeSection === section.id
+              ? " active"
+              : ""
+          );
+
+
+        const selectButton =
           document.createElement(
             "button"
           );
 
 
-        button.textContent =
+        selectButton.className =
+          "section-select-button";
+
+
+        selectButton.textContent =
           section.title;
 
 
-        button.classList.toggle(
-          "active",
-          activeSection ===
-          section.id
-        );
-
-
-        button.addEventListener(
+        selectButton.addEventListener(
           "click",
           () => {
 
             activeSection =
               section.id;
-
 
             renderSectionNavigation();
 
@@ -1932,12 +1162,175 @@ function renderSectionNavigation() {
         );
 
 
+        tab.appendChild(
+          selectButton
+        );
+
+
+        /*
+          ADMIN DELETE BUTTON
+        */
+
+        if (
+          currentUser &&
+          currentUser.id === ADMIN_UID
+        ) {
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+
+          deleteButton.className =
+            "delete-section-button";
+
+
+          deleteButton.title =
+            "Delete section";
+
+
+          deleteButton.textContent =
+            "×";
+
+
+          deleteButton.addEventListener(
+            "click",
+            event => {
+
+              event.stopPropagation();
+
+              deleteSection(
+                section
+              );
+
+            }
+          );
+
+
+          tab.appendChild(
+            deleteButton
+          );
+
+        }
+
+
         nav.appendChild(
-          button
+          tab
         );
 
       }
     );
+
+}
+
+
+/* =========================================================
+   DELETE SECTION
+   ========================================================= */
+
+async function deleteSection(section) {
+
+  if (
+    !currentUser ||
+    currentUser.id !== ADMIN_UID
+  ) {
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete "${section.title}"?\n\n` +
+      `The photos and videos will NOT be deleted.\n\n` +
+      `They will be moved to "all memories ♡".`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  /*
+    Move memories from this section
+    into all memories.
+  */
+
+  const {
+    error: moveError
+  } =
+    await supabaseClient
+      .from("memories")
+      .update({
+        album: "all memories ♡"
+      })
+      .eq(
+        "album",
+        section.title
+      );
+
+
+  if (moveError) {
+
+    alert(
+      "Couldn't move the memories ♡\n\n" +
+      moveError.message
+    );
+
+    console.error(
+      moveError
+    );
+
+    return;
+  }
+
+
+  /*
+    Delete section.
+  */
+
+  const {
+    error: deleteError
+  } =
+    await supabaseClient
+      .from("sections")
+      .delete()
+      .eq(
+        "id",
+        section.id
+      );
+
+
+  if (deleteError) {
+
+    alert(
+      "Couldn't delete the section ♡\n\n" +
+      deleteError.message
+    );
+
+    console.error(
+      deleteError
+    );
+
+    return;
+  }
+
+
+  if (
+    activeSection ===
+    section.id
+  ) {
+
+    activeSection =
+      "all";
+
+  }
+
+
+  await loadSections();
+
+  await loadGallery();
 
 }
 
@@ -1955,8 +1348,7 @@ function renderSectionSelect() {
       );
 
 
-  select.innerHTML =
-    "";
+  select.innerHTML = "";
 
 
   const allOption =
@@ -2014,7 +1406,7 @@ function renderSectionSelect() {
 
 
 /* =========================================================
-   SECTION HEADING
+   HEADING
    ========================================================= */
 
 function updateHeading() {
@@ -2026,8 +1418,7 @@ function updateHeading() {
       );
 
 
-  heading.innerHTML =
-    "";
+  heading.innerHTML = "";
 
 
   if (
@@ -2041,7 +1432,6 @@ function updateHeading() {
     `;
 
     return;
-
   }
 
 
@@ -2097,117 +1487,120 @@ function updateHeading() {
 
 
 /* =========================================================
-   SORT CONTROL
+   DATE SORTING
+   =========================================================
+
+   IMPORTANT:
+
+   Dates such as:
+
+   2025-01-02
+   2025-08-14
+   2026-03-10
+
+   are converted to numbers:
+
+   20250102
+   20250814
+   20260310
+
+   This makes the sorting reliable and
+   avoids timezone problems.
    ========================================================= */
 
-document
-  .getElementById(
-    "sortSelect"
-  )
-  .addEventListener(
-    "change",
-    event => {
+function dateNumber(value) {
 
-      currentSort =
-        event.target.value;
-
-
-      loadGallery();
-
-    }
-  );
-
-
-/* =========================================================
-   STORAGE URL
-   ========================================================= */
-
-function getMediaURL(
-  path
-) {
-
-  if (!path) {
-    return "";
+  if (!value) {
+    return null;
   }
 
 
-  const result =
-    supabaseClient
-      .storage
-      .from("gallery")
-      .getPublicUrl(path);
+  const cleaned =
+    String(value)
+      .trim()
+      .replace(/-/g, "")
+      .replace(/T.*$/, "");
 
 
-  return result
-    .data
-    .publicUrl;
+  const number =
+    Number(
+      cleaned
+    );
+
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    return null;
+
+  }
+
+
+  return number;
 
 }
 
 
-/* =========================================================
-   SORT MEMORIES
-   ========================================================= */
+function sortMemories(memories) {
 
-function sortMemories(
-  memories
-) {
-
-  return [
-    ...memories
-  ].sort(
+  return [...memories].sort(
     (a, b) => {
+
+      /*
+        Recently added
+      */
 
       if (
         currentSort ===
         "added"
       ) {
 
-        return new Date(
-          b.created_at
-        ) -
-        new Date(
-          a.created_at
-        );
+        const addedA =
+          new Date(
+            a.created_at || 0
+          ).getTime();
+
+
+        const addedB =
+          new Date(
+            b.created_at || 0
+          ).getTime();
+
+
+        return addedB -
+          addedA;
 
       }
 
 
       /*
-        Memories with an actual
-        memory_date are sorted first.
-
-        Memories without a date
-        fall to the bottom.
+        Actual memory dates
       */
 
       const dateA =
-        a.memory_date
-          ? new Date(
-              a.memory_date
-            ).getTime()
-          : null;
+        dateNumber(
+          a.memory_date
+        );
 
 
       const dateB =
-        b.memory_date
-          ? new Date(
-              b.memory_date
-            ).getTime()
-          : null;
+        dateNumber(
+          b.memory_date
+        );
 
+
+      /*
+        Memories without dates
+        go to the bottom.
+      */
 
       if (
         dateA === null &&
         dateB === null
       ) {
 
-        return new Date(
-          b.created_at
-        ) -
-        new Date(
-          a.created_at
-        );
+        return 0;
 
       }
 
@@ -2230,6 +1623,10 @@ function sortMemories(
       }
 
 
+      /*
+        OLDEST FIRST
+      */
+
       if (
         currentSort ===
         "oldest"
@@ -2241,6 +1638,10 @@ function sortMemories(
       }
 
 
+      /*
+        NEWEST FIRST
+      */
+
       return dateB -
         dateA;
 
@@ -2251,29 +1652,50 @@ function sortMemories(
 
 
 /* =========================================================
+   SORT DROPDOWN
+   ========================================================= */
+
+document
+  .getElementById(
+    "sortSelect"
+  )
+  .addEventListener(
+    "change",
+    event => {
+
+      currentSort =
+        event.target.value;
+
+      loadGallery();
+
+    }
+  );
+
+
+/* =========================================================
    FORMAT DATE
    ========================================================= */
 
-function formatDate(
-  value
-) {
+function formatDate(value) {
 
   if (!value) {
     return "";
   }
 
 
-  const date =
-    new Date(
-      value +
-      "T00:00:00"
-    );
+  /*
+    Use the date components directly
+    instead of adding a timezone-sensitive
+    Date conversion.
+  */
+
+  const parts =
+    String(value)
+      .split("-");
 
 
   if (
-    Number.isNaN(
-      date.getTime()
-    )
+    parts.length !== 3
   ) {
 
     return value;
@@ -2281,19 +1703,66 @@ function formatDate(
   }
 
 
+  const year =
+    Number(parts[0]);
+
+
+  const month =
+    Number(parts[1]);
+
+
+  const day =
+    Number(parts[2]);
+
+
+  if (
+    !year ||
+    !month ||
+    !day
+  ) {
+
+    return value;
+
+  }
+
+
+  const date =
+    new Date(
+      year,
+      month - 1,
+      day
+    );
+
+
   return date.toLocaleDateString(
     undefined,
     {
-      year:
-        "numeric",
-
-      month:
-        "long",
-
-      day:
-        "numeric"
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     }
   );
+
+}
+
+
+/* =========================================================
+   MEDIA URL
+   ========================================================= */
+
+function getMediaURL(path) {
+
+  if (!path) {
+    return "";
+  }
+
+
+  return supabaseClient
+    .storage
+    .from("gallery")
+    .getPublicUrl(path)
+    .data
+    .publicUrl;
 
 }
 
@@ -2328,9 +1797,8 @@ async function loadGallery() {
 
 
   /*
-    We don't use database ordering
-    here because the website handles
-    the three sorting choices.
+    If a specific section is selected,
+    find its name and filter memories.
   */
 
   if (
@@ -2369,7 +1837,7 @@ async function loadGallery() {
   if (error) {
 
     console.error(
-      "Could not load memories:",
+      "Gallery error:",
       error
     );
 
@@ -2380,14 +1848,11 @@ async function loadGallery() {
       </div>
     `;
 
-
     return;
-
   }
 
 
-  gallery.innerHTML =
-    "";
+  gallery.innerHTML = "";
 
 
   if (
@@ -2401,19 +1866,20 @@ async function loadGallery() {
       </div>
     `;
 
-
     return;
-
   }
 
 
-  const memories =
-    sortMemories(
-      data
-    );
+  /*
+    THIS IS WHERE THE ACTUAL SORT
+    HAPPENS BEFORE CARDS ARE CREATED.
+  */
+
+  const sorted =
+    sortMemories(data);
 
 
-  memories.forEach(
+  sorted.forEach(
     item => {
 
       const card =
@@ -2442,9 +1908,7 @@ async function loadGallery() {
         );
 
 
-      /* =================================================
-         IMAGE
-         ================================================= */
+      /* PHOTO */
 
       if (
         item.type ===
@@ -2465,42 +1929,16 @@ async function loadGallery() {
           "async";
 
 
+        image.src =
+          url;
+
+
         image.alt =
           item.caption &&
           item.caption.trim()
             ? item.caption
             : "Gallery photo";
 
-
-        image.src =
-          url;
-
-
-        image.addEventListener(
-          "error",
-          () => {
-
-            media.innerHTML = `
-              <div
-                style="
-                  padding:30px;
-                  text-align:center;
-                  color:#a08b94;
-                  font-size:12px;
-                "
-              >
-                photo unavailable ♡
-              </div>
-            `;
-
-          }
-        );
-
-
-        /*
-          Photos open in the
-          lightbox when clicked.
-        */
 
         image.addEventListener(
           "click",
@@ -2536,9 +1974,7 @@ async function loadGallery() {
       }
 
 
-      /* =================================================
-         VIDEO
-         ================================================= */
+      /* VIDEO */
 
       else if (
         item.type ===
@@ -2567,27 +2003,6 @@ async function loadGallery() {
           url;
 
 
-        video.addEventListener(
-          "error",
-          () => {
-
-            media.innerHTML = `
-              <div
-                style="
-                  padding:30px;
-                  text-align:center;
-                  color:#a08b94;
-                  font-size:12px;
-                "
-              >
-                video unavailable ♡
-              </div>
-            `;
-
-          }
-        );
-
-
         media.appendChild(
           video
         );
@@ -2600,9 +2015,7 @@ async function loadGallery() {
       );
 
 
-      /* =================================================
-         INFORMATION
-         ================================================= */
+      /* INFO */
 
       const info =
         document.createElement(
@@ -2647,9 +2060,6 @@ async function loadGallery() {
 
       /*
         LOCATION
-
-        Only displayed if
-        the user entered one.
       */
 
       if (
@@ -2681,9 +2091,6 @@ async function loadGallery() {
 
       /*
         CAPTION
-
-        Only displayed if
-        the user entered one.
       */
 
       if (
@@ -2712,15 +2119,8 @@ async function loadGallery() {
       }
 
 
-      /*
-        Only add the info container
-        if it actually contains
-        something.
-      */
-
       if (
-        info.children.length >
-        0
+        info.children.length
       ) {
 
         card.appendChild(
@@ -2730,9 +2130,9 @@ async function loadGallery() {
       }
 
 
-      /* =================================================
-         ADMIN DELETE
-         ================================================= */
+      /*
+        ADMIN DELETE MEMORY
+      */
 
       const actions =
         document.createElement(
@@ -2791,28 +2191,23 @@ async function loadGallery() {
    DELETE MEMORY
    ========================================================= */
 
-async function deleteMemory(
-  item
-) {
+async function deleteMemory(item) {
 
   if (
     !currentUser ||
-    currentUser.id !==
-    ADMIN_UID
+    currentUser.id !== ADMIN_UID
   ) {
 
     return;
-
   }
 
 
-  const confirmed =
-    confirm(
+  if (
+    !confirm(
       "Delete this memory? ♡"
-    );
+    )
+  ) {
 
-
-  if (!confirmed) {
     return;
   }
 
@@ -2836,14 +2231,7 @@ async function deleteMemory(
       error.message
     );
 
-
-    console.error(
-      error
-    );
-
-
     return;
-
   }
 
 
@@ -2867,7 +2255,7 @@ async function deleteMemory(
 
 
 /* =========================================================
-   OPEN ADD MEMORY
+   ADD MEMORY
    ========================================================= */
 
 document
@@ -2888,10 +2276,6 @@ document
   );
 
 
-/* =========================================================
-   SAVE MEMORY
-   ========================================================= */
-
 document
   .getElementById(
     "saveMemory"
@@ -2902,12 +2286,10 @@ document
 
       if (
         !currentUser ||
-        currentUser.id !==
-        ADMIN_UID
+        currentUser.id !== ADMIN_UID
       ) {
 
         return;
-
       }
 
 
@@ -2925,30 +2307,24 @@ document
           "Please choose a photo or video ♡"
         );
 
-
         return;
-
       }
 
 
-      const saveButton =
+      const button =
         document
           .getElementById(
             "saveMemory"
           );
 
 
-      saveButton.disabled =
+      button.disabled =
         true;
 
 
-      saveButton.textContent =
+      button.textContent =
         "saving... ♡";
 
-
-      /* =================================================
-         TYPE
-         ================================================= */
 
       const type =
         file.type.startsWith(
@@ -2958,15 +2334,9 @@ document
           : "image";
 
 
-      /* =================================================
-         SAFE FILE NAME
-         ================================================= */
-
       const cleanName =
         file.name
-          .normalize(
-            "NFKD"
-          )
+          .normalize("NFKD")
           .replace(
             /[^\w.\- ]/g,
             ""
@@ -2981,9 +2351,9 @@ document
         `${crypto.randomUUID()}-${cleanName}`;
 
 
-      /* =================================================
-         UPLOAD
-         ================================================= */
+      /*
+        UPLOAD
+      */
 
       const {
         error:
@@ -3015,37 +2385,27 @@ document
           uploadError.message
         );
 
-
-        saveButton.disabled =
+        button.disabled =
           false;
 
-
-        saveButton.textContent =
+        button.textContent =
           "add memory ♡";
 
-
         return;
-
       }
 
 
-      /* =================================================
-         DATE
+      /*
+        GET FORM DATA
+      */
 
-         Keep the real date in memory_date.
-         ================================================= */
-
-      const dateInput =
+      const memoryDate =
         document
           .getElementById(
             "memoryDate"
           )
           .value;
 
-
-      /* =================================================
-         LOCATION
-         ================================================= */
 
       const location =
         document
@@ -3056,10 +2416,6 @@ document
           .trim();
 
 
-      /* =================================================
-         SECTION
-         ================================================= */
-
       const album =
         document
           .getElementById(
@@ -3067,10 +2423,6 @@ document
           )
           .value;
 
-
-      /* =================================================
-         CAPTION
-         ================================================= */
 
       const caption =
         document
@@ -3081,13 +2433,12 @@ document
           .trim();
 
 
-      /* =================================================
-         DATABASE RECORD
+      /*
+        SAVE DATABASE RECORD
 
-         IMPORTANT:
-         memory_date is the DATE column.
-         location is the LOCATION column.
-         ================================================= */
+        memory_date is the important
+        column used by the sorting.
+      */
 
       const {
         error:
@@ -3105,21 +2456,8 @@ document
             album,
 
             memory_date:
-              dateInput ||
+              memoryDate ||
               null,
-
-            /*
-              Keep the old date column
-              updated too, so older parts
-              of the gallery don't lose it.
-            */
-
-            date:
-              dateInput
-              ? formatDate(
-                  dateInput
-                )
-              : "",
 
             location,
 
@@ -3129,12 +2467,6 @@ document
 
 
       if (dbError) {
-
-        /*
-          If the database insert fails,
-          remove the uploaded file so
-          we don't leave an orphaned file.
-        */
 
         await supabaseClient
           .storage
@@ -3149,54 +2481,46 @@ document
           dbError.message
         );
 
-
-        saveButton.disabled =
+        button.disabled =
           false;
 
-
-        saveButton.textContent =
+        button.textContent =
           "add memory ♡";
 
-
         return;
-
       }
 
 
-      /* =================================================
-         RESET FORM
-         ================================================= */
+      /*
+        CLEAR FORM
+      */
 
       document
         .getElementById(
           "file"
         )
-        .value =
-        "";
+        .value = "";
 
 
       document
         .getElementById(
           "memoryDate"
         )
-        .value =
-        "";
+        .value = "";
 
 
       document
         .getElementById(
           "memoryLocation"
         )
-        .value =
-        "";
+        .value = "";
 
 
       document
         .getElementById(
           "memoryCaption"
         )
-        .value =
-        "";
+        .value = "";
 
 
       closeModal(
@@ -3204,11 +2528,11 @@ document
       );
 
 
-      saveButton.disabled =
+      button.disabled =
         false;
 
 
-      saveButton.textContent =
+      button.textContent =
         "add memory ♡";
 
 
@@ -3238,10 +2562,6 @@ document
   );
 
 
-/* =========================================================
-   SAVE SECTION
-   ========================================================= */
-
 document
   .getElementById(
     "saveSection"
@@ -3252,12 +2572,10 @@ document
 
       if (
         !currentUser ||
-        currentUser.id !==
-        ADMIN_UID
+        currentUser.id !== ADMIN_UID
       ) {
 
         return;
-
       }
 
 
@@ -3285,9 +2603,7 @@ document
           "Please give your section a name ♡"
         );
 
-
         return;
-
       }
 
 
@@ -3301,9 +2617,7 @@ document
           '"all memories ♡" is already your default section.'
         );
 
-
         return;
-
       }
 
 
@@ -3351,9 +2665,7 @@ document
           error.message
         );
 
-
         return;
-
       }
 
 
@@ -3361,16 +2673,14 @@ document
         .getElementById(
           "sectionName"
         )
-        .value =
-        "";
+        .value = "";
 
 
       document
         .getElementById(
           "sectionSubtitle"
         )
-        .value =
-        "";
+        .value = "";
 
 
       closeModal(
@@ -3400,21 +2710,15 @@ document
         "lightbox"
       );
 
-
       document
         .getElementById(
           "lightboxImage"
         )
-        .src =
-        "";
+        .src = "";
 
     }
   );
 
-
-/* =========================================================
-   CLICK OUTSIDE LIGHTBOX
-   ========================================================= */
 
 document
   .getElementById(
@@ -3433,13 +2737,11 @@ document
           "lightbox"
         );
 
-
         document
           .getElementById(
             "lightboxImage"
           )
-          .src =
-          "";
+          .src = "";
 
       }
 
@@ -3485,10 +2787,6 @@ document.addEventListener(
 
 async function start() {
 
-  /*
-    Check existing login.
-  */
-
   const {
     data
   } =
@@ -3502,21 +2800,14 @@ async function start() {
     null;
 
 
-  /*
-    Only your account gets
-    admin functionality.
-  */
-
   if (
     currentUser &&
-    currentUser.id !==
-    ADMIN_UID
+    currentUser.id !== ADMIN_UID
   ) {
 
     await supabaseClient
       .auth
       .signOut();
-
 
     currentUser =
       null;
@@ -3526,7 +2817,6 @@ async function start() {
 
   updateAdminUI();
 
-
   await loadSections();
 
   await loadGallery();
@@ -3534,15 +2824,9 @@ async function start() {
 }
 
 
-/* =========================================================
-   START GALLERY
-   ========================================================= */
-
 start();
 
 </script>
 
-
 </body>
-
 </html>
