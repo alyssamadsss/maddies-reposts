@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reposts ♡</title>
+<style>
+:root{
+  --pink:#f6dbe5;
+  --pink-deep:#d99aaa;
+  --pink-soft:#fff5f8;
+  --white:#ffffff;
+  --cream:#fffafb;
+  --text:#6b505b;
+  --muted:#a88e98;
+  --line:#efdce3;
+  --shadow:0 10px 30px rgba(164,112,132,.10);
+  --shadow-hover:0 14px 35px rgba(164,112,132,.15);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 5%,rgba(246,219,229,.55),transparent 25%),
+    radial-gradient(circle at 90% 10%,rgba(255,239,245,.8),transparent 25%),
+    linear-gradient(180deg,#fff8fa 0%,#fff 55%,#fff9fb 100%);
+  color:var(--text);
+  font-family:Georgia,"Times New Roman",serif;
+}
+button,input,textarea{font:inherit}
+button{transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+button:hover{transform:translateY(-1px)}
+.page{max-width:1180px;margin:auto;padding:34px 24px 80px}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+}
+.brand{
+  text-align:left;
+}
+h1{
+  margin:0;
+  font-size:38px;
+  line-height:1;
+  font-weight:500;
+  letter-spacing:-.5px;
+}
+.subtitle{
+  margin:9px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:.2px;
+}
+.admin-btn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.92);
+  border-radius:999px;
+  padding:9px 15px;
+  color:var(--text);
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  white-space:nowrap;
+}
+.admin-btn:hover{background:var(--pink-soft)}
+
+.divider{
+  height:1px;
+  background:var(--line);
+  margin:0 0 28px;
+}
+
+.admin-panel{
+  display:none;
+  background:rgba(255,255,255,.95);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px;
+  margin:0 0 30px;
+  box-shadow:var(--shadow);
+}
+.admin-panel.open{display:block}
+.admin-panel h2{
+  margin:0 0 16px;
+  font-size:21px;
+  font-weight:500;
+}
+.field{margin-bottom:13px}
+.field label{
+  display:block;
+  margin:0 0 6px;
+  color:var(--muted);
+  font-size:12px;
+}
+input,textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fffafd;
+  border-radius:13px;
+  padding:11px 13px;
+  outline:none;
+  color:var(--text);
+}
+input:focus,textarea:focus{
+  border-color:#e3b7c5;
+  box-shadow:0 0 0 3px rgba(246,219,229,.35);
+}
+textarea{min-height:78px;resize:vertical}
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.primary,.secondary,.delete,.edit,.save,.cancel{
+  border-radius:999px;
+  padding:9px 15px;
+  cursor:pointer;
+}
+.primary{
+  border:1px solid #eac3cf;
+  background:var(--pink);
+  color:var(--text);
+}
+.secondary{
+  border:1px solid var(--line);
+  background:var(--pink-soft);
+  color:var(--text);
+}
+.delete{
+  border:1px solid #f0d5dc;
+  background:#fff3f5;
+  color:#a05d6d;
+}
+.status{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:10px;
+  min-height:16px;
+}
+.note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  margin:13px 0 0;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
+  align-items:start;
+}
+.card{
+  min-width:0;
+  overflow:hidden;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-hover);
+}
+.embed{
+  min-width:0;
+  max-width:100%;
+  border-radius:13px;
+  overflow:hidden;
+  background:#fff7fa;
+  min-height:180px;
+}
+.embed iframe{max-width:100%!important;min-width:0!important;width:100%!important;}
+.instagram-media{max-width:100%!important;min-width:0!important;width:100%!important;}
+.caption{
+  padding:11px 5px 3px;
+  font-size:14px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.caption.empty-caption{display:none}
+.caption-editor{
+  margin-top:10px;
+  display:none;
+}
+.admin-on .caption-editor{display:block}
+.caption-editor textarea{
+  min-height:62px;
+  font-size:13px;
+}
+.card-actions{
+  display:none;
+  gap:7px;
+  justify-content:flex-end;
+  margin-top:10px;
+}
+.admin-on .card-actions{display:flex}
+.edit{
+  border:1px solid var(--line);
+  background:#fffafd;
+  color:var(--text);
+}
+.save{
+  border:1px solid #eac3cf;
+  background:var(--pink);
+  color:var(--text);
+}
+.cancel{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--muted);
+}
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:85px 20px;
+  font-size:14px;
+}
+.footer-heart{
+  text-align:center;
+  color:#caa8b3;
+  font-size:13px;
+  margin-top:38px;
+}
+
+@media(max-width:1000px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+  .page{padding:28px 15px 60px}
+  h1{font-size:32px}
+}
+@media(max-width:520px){
+  .top{align-items:flex-start}
+  .grid{grid-template-columns:1fr}
+  .card{border-radius:17px}
+  .admin-btn{padding:8px 12px}
+}
+
+.history-modal{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(88,60,70,.25);backdrop-filter:blur(4px);
+  padding:25px;align-items:center;justify-content:center;
+}
+.history-modal.open{display:flex}
+.history-box{
+  width:min(100%,900px);max-height:88vh;overflow:auto;
+  background:#fff;border:1px solid var(--line);border-radius:24px;
+  box-shadow:0 20px 60px rgba(100,65,80,.18);padding:22px;
+}
+.history-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:16px}
+.history-head h2{margin:0;font-size:22px;font-weight:500}
+.history-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.history-close{
+  width:34px;height:34px;border:1px solid var(--line);background:var(--pink-soft);
+  border-radius:50%;cursor:pointer;color:var(--text);font-size:22px;line-height:1;
+}
+.history-list{display:flex;flex-direction:column;gap:9px}
+.visitor-row{
+  border:1px solid var(--line);border-radius:15px;padding:12px 13px;
+  background:#fffafd;display:grid;grid-template-columns:1fr auto;gap:8px 15px;
+}
+.visitor-main{min-width:0}
+.visitor-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.visitor-meta{font-size:11px;color:var(--muted);line-height:1.55}
+.visitor-right{text-align:right;white-space:nowrap}
+.online-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#8fc7a0;margin-right:5px;vertical-align:1px;
+}
+.offline-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#d7c4cb;margin-right:5px;vertical-align:1px;
+}
+.visitor-time{font-size:11px;color:var(--muted);margin-top:5px}
+.history-empty{text-align:center;color:var(--muted);padding:35px 10px}
+@media(max-width:600px){
+  .history-modal{padding:12px}.history-box{padding:16px;border-radius:19px}
+  .visitor-row{grid-template-columns:1fr}
+  .visitor-right{text-align:left}
+}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script async defer src="https://www.instagram.com/embed.js"></script>
+</head>
+<body>
+<button class="admin-btn" id="adminBtn">♡ admin</button>
+<main class="page">
+<header><h1>reposts ♡</h1><p class="subtitle">little things worth reposting</p></header>
+<section class="admin-panel" id="adminPanel">
+<h2>manage reposts ♡</h2>
+<div id="loginArea">
+<div class="field"><label>admin email</label><input id="email" type="email" autocomplete="username" placeholder="your email"></div>
+<div class="field"><label>admin password</label><input id="password" type="password" autocomplete="current-password" placeholder="your Firebase password"></div>
+<button class="primary" id="loginBtn">unlock ♡</button><div class="status" id="loginStatus"></div>
+</div>
+<div id="editorArea" style="display:none">
+<div class="field"><label>Instagram post / reel link</label><input id="url" type="url" placeholder="https://www.instagram.com/p/.../"></div>
+<div class="field"><label>caption</label><textarea id="caption" placeholder="write a little caption ♡"></textarea></div>
+<div class="row">
+  <button class="primary" id="addBtn">add repost ♡</button>
+  <button class="secondary" id="historyBtn">visitor history ♡</button>
+  <button class="secondary" id="logoutBtn">lock</button>
+</div>
+<div class="status" id="editorStatus"></div><p class="note">add, edit or remove reposts here ♡ everyone sees the same updates.</p>
+</div>
+</section>
+<section class="grid" id="grid"></section><div class="empty" id="empty">loading reposts ♡</div>
+</main>
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyDdnRqRysHijmVJo9lqGHz5Oc7YaigNDow",
+authDomain:"mads-reposts.firebaseapp.com",
+projectId:"mads-reposts",
+storageBucket:"mads-reposts.firebasestorage.app",
+messagingSenderId:"366856299182",
+appId:"1:366856299182:web:0abe419dac4929a134c33f",
+measurementId:"G-LDN3FL4JCM"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(),db=firebase.firestore(),repostsRef=db.collection("reposts");
+let items=[];
+function status(id,text){document.getElementById(id).textContent=text}
+function normalizeUrl(raw){try{const u=new URL(raw.trim());if(!/instagram\.com$/i.test(u.hostname)&&!/\.instagram\.com$/i.test(u.hostname))return null;return u.href}catch{return null}}
+function setAdmin(on){document.body.classList.toggle("admin-on",on);document.getElementById("loginArea").style.display=on?"none":"block";document.getElementById("editorArea").style.display=on?"block":"none"}
+async function loadReposts(){try{const snap=await repostsRef.orderBy("createdAt","desc").get();items=snap.docs.map(d=>({id:d.id,...d.data()}));render()}catch(e){console.error(e);document.getElementById("empty").textContent="couldn't load reposts ♡"}}
+function render(){
+  const grid=document.getElementById("grid");
+  const empty=document.getElementById("empty");
+  grid.innerHTML="";
+  empty.style.display=items.length?"none":"block";
+
+  items.forEach(item=>{
+    const card=document.createElement("article");
+    card.className="card";
+
+    const embed=document.createElement("div");
+    embed.className="embed";
+
+    const block=document.createElement("blockquote");
+    block.className="instagram-media";
+    block.setAttribute("data-instgrm-permalink",item.url);
+    block.setAttribute("data-instgrm-version","14");
+    block.style.cssText="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,.5),0 1px 10px 0 rgba(0,0,0,.15);margin:0 auto;max-width:100%;min-width:0;width:100%;padding:0;";
+
+    embed.appendChild(block);
+    card.appendChild(embed);
+
+    const caption=document.createElement("div");
+    caption.className="caption" + (item.caption ? "" : " empty-caption");
+    caption.textContent=item.caption || "";
+    card.appendChild(caption);
+
+    const editor=document.createElement("div");
+    editor.className="caption-editor";
+
+    const textarea=document.createElement("textarea");
+    textarea.value=item.caption || "";
+    textarea.placeholder="edit caption ♡";
+
+    const editRow=document.createElement("div");
+    editRow.className="row";
+    editRow.style.marginTop="7px";
+
+    const save=document.createElement("button");
+    save.className="save";
+    save.textContent="save caption ♡";
+
+    const cancel=document.createElement("button");
+    cancel.className="cancel";
+    cancel.textContent="cancel";
+
+    save.onclick=async()=>{
+      if(!auth.currentUser)return;
+      save.disabled=true;
+      try{
+        await repostsRef.doc(item.id).update({
+          caption:textarea.value.trim()
+        });
+        status("editorStatus","caption updated ♡");
+        await loadReposts();
+      }catch(e){
+        console.error(e);
+        status("editorStatus","couldn't update caption ♡");
+        save.disabled=false;
+      }
+    };
+
+    cancel.onclick=()=>{
+      textarea.value=item.caption || "";
+      editor.style.display="none";
+    };
+
+    editRow.appendChild(save);
+    editRow.appendChild(cancel);
+    editor.appendChild(textarea);
+    editor.appendChild(editRow);
+    card.appendChild(editor);
+
+    const actions=document.createElement("div");
+    actions.className="card-actions";
+
+    const edit=document.createElement("button");
+    edit.className="edit";
+    edit.textContent="edit caption";
+
+    edit.onclick=()=>{
+      editor.style.display=editor.style.display==="block"?"none":"block";
+      if(editor.style.display==="block")textarea.focus();
+    };
+
+    const del=document.createElement("button");
+    del.className="delete";
+    del.textContent="delete";
+
+    del.onclick=async()=>{
+      if(!auth.currentUser||!confirm("Delete this repost?"))return;
+      try{
+        await repostsRef.doc(item.id).delete();
+        status("editorStatus","repost deleted ♡");
+        await loadReposts();
+      }catch(e){
+        console.error(e);
+        status("editorStatus","couldn't delete repost ♡");
+      }
+    };
+
+    actions.appendChild(edit);
+    actions.appendChild(del);
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+
+  if(window.instgrm)window.instgrm.Embeds.process();
+}
+
+document.getElementById("adminBtn").onclick=()=>{
+  document.getElementById("adminPanel").classList.toggle("open");
+};
+
+document.getElementById("loginBtn").onclick=async()=>{
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  if(!email||!password)return status("loginStatus","enter your email and password ♡");
+  try{
+    await auth.signInWithEmailAndPassword(email,password);
+    setAdmin(true);
+    status("loginStatus","");
+  }catch(e){
+    console.error(e);
+    status("loginStatus","incorrect email or password ♡");
+  }
+};
+
+document.getElementById("password").addEventListener("keydown",e=>{
+  if(e.key==="Enter")document.getElementById("loginBtn").click();
+});
+
+document.getElementById("logoutBtn").onclick=async()=>{
+  await auth.signOut();
+  setAdmin(false);
+};
+
+/* ---------------- VISITOR TRACKING ---------------- */
+
+const visitorSessionsRef=db.collection("visitor_sessions");
+const visitorEventsRef=db.collection("visitor_events");
+const visitorKey="reposts_visitor_id";
+let visitorId=localStorage.getItem(visitorKey);
+
+if(!visitorId){
+  visitorId=(crypto.randomUUID ? crypto.randomUUID() : "v_"+Date.now()+"_"+Math.random().toString(36).slice(2));
+  localStorage.setItem(visitorKey,visitorId);
+}
+
+function getDeviceLabel(){
+  const ua=navigator.userAgent||"";
+  let browser="Browser";
+  if(/Edg\//i.test(ua))browser="Edge";
+  else if(/Chrome\//i.test(ua))browser="Chrome";
+  else if(/Firefox\//i.test(ua))browser="Firefox";
+  else if(/Safari\//i.test(ua)&&!/Chrome\//i.test(ua))browser="Safari";
+
+  let device="Desktop";
+  if(/Mobi|Android|iPhone|iPad/i.test(ua))device="Mobile";
+
+  return device+" · "+browser;
+}
+
+function visitorName(){
+  return "Visitor "+visitorId.slice(0,8);
+}
+
+async function trackVisitor(eventType="page_view",data={}){
+  try{
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const sessionRef=visitorSessionsRef.doc(visitorId);
+    const existing=await sessionRef.get();
+
+    if(existing.exists){
+      await sessionRef.update({
+        lastActive:now,
+        active:true,
+        pageViews:firebase.firestore.FieldValue.increment(eventType==="page_view"?1:0),
+        device:getDeviceLabel()
+      });
+    }else{
+      await sessionRef.set({
+        visitorId:visitorId,
+        displayName:visitorName(),
+        firstSeen:now,
+        lastActive:now,
+        active:true,
+        pageViews:eventType==="page_view"?1:0,
+        device:getDeviceLabel(),
+        screen:window.innerWidth+"×"+window.innerHeight,
+        referrer:document.referrer||"direct"
+      });
+    }
+
+    await visitorEventsRef.add({
+      visitorId:visitorId,
+      type:eventType,
+      repostId:data.repostId||null,
+      repostUrl:data.repostUrl||null,
+      createdAt:now
+    });
+  }catch(e){
+    console.warn("visitor tracking:",e);
+  }
+}
+
+async function heartbeat(){
+  try{
+    await visitorSessionsRef.doc(visitorId).set({
+      visitorId:visitorId,
+      displayName:visitorName(),
+      lastActive:firebase.firestore.FieldValue.serverTimestamp(),
+      active:true,
+      device:getDeviceLabel()
+    },{merge:true});
+  }catch(e){
+    console.warn("heartbeat:",e);
+  }
+}
+
+trackVisitor("page_view");
+heartbeat();
+setInterval(heartbeat,30000);
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"){
+    heartbeat();
+  }
+});
+
+/* Mark a repost as viewed when it actually enters the visitor's screen. */
+function watchRepostViews(){
+  if(!("IntersectionObserver" in window))return;
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting && entry.intersectionRatio>=0.5){
+        const card=entry.target;
+        const id=card.dataset.repostId;
+        const item=items.find(x=>x.id===id);
+        if(item && !card.dataset.tracked){
+          card.dataset.tracked="1";
+          trackVisitor("repost_view",{repostId:item.id,repostUrl:item.url});
+        }
+      }
+    });
+  },{threshold:[0.5]});
+
+  document.querySelectorAll(".card").forEach(card=>observer.observe(card));
+}
+
+/* Patch render so cards get IDs for view tracking. */
+const originalRender=render;
+render=function(){
+  originalRender();
+  document.querySelectorAll(".card").forEach((card,i)=>{
+    if(items[i])card.dataset.repostId=items[i].id;
+  });
+  watchRepostViews();
+};
+
+/* ---------------- VISITOR HISTORY ---------------- */
+
+function formatTime(value){
+  if(!value)return "—";
+  const date=value.toDate ? value.toDate() : new Date(value);
+  return date.toLocaleString([],{
+    month:"short",day:"numeric",year:"numeric",
+    hour:"numeric",minute:"2-digit"
+  });
+}
+
+function isOnline(value){
+  if(!value)return false;
+  const date=value.toDate ? value.toDate() : new Date(value);
+  return (Date.now()-date.getTime())<90000;
+}
+
+async function loadVisitorHistory(){
+  const list=document.getElementById("historyList");
+  const summary=document.getElementById("visitorSummary");
+  list.innerHTML='<div class="history-empty">loading visitors ♡</div>';
+
+  try{
+    const snap=await visitorSessionsRef.orderBy("lastActive","desc").limit(100).get();
+    const visitors=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const online=visitors.filter(v=>isOnline(v.lastActive)).length;
+
+    summary.textContent=online+" online · "+visitors.length+" visitor"+(visitors.length===1?"":"s")+" recorded";
+
+    if(!visitors.length){
+      list.innerHTML='<div class="history-empty">no visitors yet ♡</div>';
+      return;
+    }
+
+    list.innerHTML="";
+    visitors.forEach(v=>{
+      const row=document.createElement("div");
+      row.className="visitor-row";
+
+      const main=document.createElement("div");
+      main.className="visitor-main";
+
+      const name=document.createElement("div");
+      name.className="visitor-name";
+      name.textContent=v.displayName||("Visitor "+v.id.slice(0,8));
+
+      const meta=document.createElement("div");
+      meta.className="visitor-meta";
+      meta.textContent=(v.device||"Unknown device")+" · "+(v.pageViews||0)+" page view"+((v.pageViews||0)===1?"":"s");
+
+      const right=document.createElement("div");
+      right.className="visitor-right";
+
+      const onlineNow=isOnline(v.lastActive);
+      const state=document.createElement("div");
+      state.innerHTML=(onlineNow?'<span class="online-dot"></span>online':'<span class="offline-dot"></span>offline');
+
+      const last=document.createElement("div");
+      last.className="visitor-time";
+      last.textContent=onlineNow?"active now":"last active "+formatTime(v.lastActive);
+
+      const first=document.createElement("div");
+      first.className="visitor-time";
+      first.textContent="first seen "+formatTime(v.firstSeen);
+
+      right.appendChild(state);
+      right.appendChild(last);
+      right.appendChild(first);
+      main.appendChild(name);
+      main.appendChild(meta);
+      row.appendChild(main);
+      row.appendChild(right);
+      list.appendChild(row);
+    });
+  }catch(e){
+    console.error(e);
+    summary.textContent="couldn't load visitor history";
+    list.innerHTML='<div class="history-empty">check the Firestore rules ♡</div>';
+  }
+}
+
+document.getElementById("historyBtn").onclick=async()=>{
+  document.getElementById("historyModal").classList.add("open");
+  document.getElementById("historyModal").setAttribute("aria-hidden","false");
+  await loadVisitorHistory();
+};
+
+document.getElementById("historyClose").onclick=()=>{
+  document.getElementById("historyModal").classList.remove("open");
+  document.getElementById("historyModal").setAttribute("aria-hidden","true");
+};
+
+document.getElementById("historyModal").addEventListener("click",e=>{
+  if(e.target.id==="historyModal")document.getElementById("historyClose").click();
+});
+
+document.getElementById("addBtn").onclick=async()=>{
+  if(!auth.currentUser)return status("editorStatus","please log in first ♡");
+  const url=normalizeUrl(document.getElementById("url").value);
+  const caption=document.getElementById("caption").value.trim();
+
+  if(!url)return status("editorStatus","please enter a valid Instagram link ♡");
+
+  try{
+    await repostsRef.add({
+      url:url,
+      caption:caption,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    document.getElementById("url").value="";
+    document.getElementById("caption").value="";
+    status("editorStatus","repost saved for everyone ♡");
+    await loadReposts();
+  }catch(e){
+    console.error(e);
+    status("editorStatus","couldn't save repost ♡");
+  }
+};
+
+auth.onAuthStateChanged(user=>{
+  setAdmin(!!user);
+});
+
+loadReposts();
+
+</script>
+</body>
+</html>
