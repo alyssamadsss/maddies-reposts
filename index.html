@@ -97,7 +97,6 @@ h1{
   top:18px;
   right:20px;
   z-index:1000;
-
   border:1px solid var(--line);
   background:rgba(255,255,255,.92);
   border-radius:999px;
@@ -220,14 +219,15 @@ textarea{
   margin:13px 0 0;
 }
 
-/* =========================
+
+/* =========================================
    REPOST GRID
-========================= */
+========================================= */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:20px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
   align-items:start;
 }
 
@@ -248,12 +248,11 @@ textarea{
   box-shadow:var(--shadow-hover);
 }
 
-/*
-  Instagram container.
 
-  The extra black/empty space that Instagram sometimes
-  adds around Reels is cropped by the JavaScript below.
-*/
+/* =========================================
+   INSTAGRAM EMBED
+========================================= */
+
 .embed{
   border-radius:13px;
   overflow:hidden;
@@ -264,16 +263,17 @@ textarea{
   position:relative;
 }
 
-/*
-  Force Instagram's generated iframe/container
-  to stay inside the card.
-*/
 .embed blockquote.instagram-media{
   width:100% !important;
   max-width:100% !important;
   min-width:0 !important;
   margin:0 !important;
 }
+
+
+/* =========================================
+   CAPTIONS
+========================================= */
 
 .caption{
   padding:11px 5px 3px;
@@ -344,17 +344,21 @@ textarea{
   margin-top:38px;
 }
 
-/* =========================
+
+/* =========================================
    RESPONSIVE
-========================= */
+========================================= */
 
 @media(max-width:1000px){
+
   .grid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
+
 }
 
 @media(max-width:760px){
+
   .grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:15px;
@@ -367,9 +371,11 @@ textarea{
   h1{
     font-size:32px;
   }
+
 }
 
 @media(max-width:520px){
+
   .top{
     align-items:flex-start;
   }
@@ -387,100 +393,166 @@ textarea{
     top:12px;
     right:12px;
   }
+
 }
 </style>
 
-<!-- Firebase -->
+
+<!-- =========================================
+     FIREBASE
+========================================= -->
+
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 
-<!-- Instagram embeds -->
+<!-- INSTAGRAM -->
 <script async src="https://www.instagram.com/embed.js"></script>
 
 </head>
 
+
 <body>
 
-<button class="admin-btn" id="adminBtn">♡ admin</button>
+<button class="admin-btn" id="adminBtn">
+  ♡ admin
+</button>
+
 
 <main class="page">
 
 <header>
   <h1>reposts ♡</h1>
-  <p class="subtitle">little things worth reposting</p>
+  <p class="subtitle">
+    little things worth reposting
+  </p>
 </header>
+
+
+<!-- =========================================
+     ADMIN PANEL
+========================================= -->
 
 <section class="admin-panel" id="adminPanel">
 
-  <h2>manage reposts ♡</h2>
+  <h2>
+    manage reposts ♡
+  </h2>
+
 
   <!-- LOGIN -->
+
   <div id="loginArea">
 
     <div class="field">
-      <label>admin email</label>
+
+      <label>
+        admin email
+      </label>
+
       <input
         id="email"
         type="email"
         autocomplete="username"
         placeholder="your email"
       >
+
     </div>
 
+
     <div class="field">
-      <label>admin password</label>
+
+      <label>
+        admin password
+      </label>
+
       <input
         id="password"
         type="password"
         autocomplete="current-password"
         placeholder="your Firebase password"
       >
+
     </div>
 
-    <button class="primary" id="loginBtn">
+
+    <button
+      class="primary"
+      id="loginBtn"
+    >
       unlock ♡
     </button>
 
-    <div class="status" id="loginStatus"></div>
+
+    <div
+      class="status"
+      id="loginStatus"
+    ></div>
 
   </div>
 
-  <!-- ADMIN EDITOR -->
-  <div id="editorArea" style="display:none">
+
+  <!-- EDITOR -->
+
+  <div
+    id="editorArea"
+    style="display:none"
+  >
 
     <div class="field">
-      <label>Instagram post / reel link</label>
+
+      <label>
+        Instagram post / reel link
+      </label>
 
       <input
         id="url"
         type="url"
         placeholder="https://www.instagram.com/p/..."
       >
+
     </div>
 
+
     <div class="field">
-      <label>caption</label>
+
+      <label>
+        caption
+      </label>
 
       <textarea
         id="caption"
         placeholder="write a little caption ♡"
       ></textarea>
+
     </div>
+
 
     <div class="row">
 
-      <button class="primary" id="addBtn">
+      <button
+        class="primary"
+        id="addBtn"
+      >
         add repost ♡
       </button>
 
-      <button class="secondary" id="logoutBtn">
+
+      <button
+        class="secondary"
+        id="logoutBtn"
+      >
         lock
       </button>
 
     </div>
 
-    <div class="status" id="editorStatus"></div>
+
+    <div
+      class="status"
+      id="editorStatus"
+    ></div>
+
 
     <p class="note">
       add, edit or remove reposts here ♡ everyone sees the same updates.
@@ -490,19 +562,32 @@ textarea{
 
 </section>
 
-<section class="grid" id="grid"></section>
 
-<div class="empty" id="empty">
+<!-- =========================================
+     REPOSTS
+========================================= -->
+
+<section
+  class="grid"
+  id="grid"
+></section>
+
+
+<div
+  class="empty"
+  id="empty"
+>
   loading reposts ♡
 </div>
 
 </main>
 
+
 <script>
 
-/* =========================================================
-   FIREBASE
-========================================================= */
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
 
 const firebaseConfig = {
   apiKey: "AIzaSyDdnRqRysHijmVJo9lqGHz5Oc7YaigNDow",
@@ -514,50 +599,62 @@ const firebaseConfig = {
   measurementId: "G-LDN3FL4JCM"
 };
 
+
 firebase.initializeApp(firebaseConfig);
 
+
 const auth = firebase.auth();
+
 const db = firebase.firestore();
-const repostsRef = db.collection("reposts");
+
+const repostsRef =
+  db.collection("reposts");
+
 
 let items = [];
 
 
-/* =========================================================
+/* =========================================
    STATUS
-========================================================= */
+========================================= */
 
-function status(id, text) {
+function status(id,text){
 
-  const element = document.getElementById(id);
+  const element =
+    document.getElementById(id);
 
-  if (element) {
+  if(element){
     element.textContent = text;
   }
 
 }
 
 
-/* =========================================================
-   URL VALIDATION
-========================================================= */
+/* =========================================
+   NORMALIZE INSTAGRAM URL
+========================================= */
 
-function normalizeUrl(raw) {
+function normalizeUrl(raw){
 
-  try {
+  try{
 
-    const u = new URL(raw.trim());
+    const u =
+      new URL(raw.trim());
 
-    if (
+
+    if(
       !/instagram\.com$/i.test(u.hostname) &&
       !/\.instagram\.com$/i.test(u.hostname)
-    ) {
+    ){
+
       return null;
+
     }
+
 
     return u.href;
 
-  } catch {
+  }catch{
 
     return null;
 
@@ -566,47 +663,64 @@ function normalizeUrl(raw) {
 }
 
 
-/* =========================================================
+/* =========================================
    ADMIN STATE
-========================================================= */
+========================================= */
 
-function setAdmin(on) {
+function setAdmin(on){
 
-  document.body.classList.toggle("admin-on", on);
+  document.body.classList.toggle(
+    "admin-on",
+    on
+  );
 
-  document.getElementById("loginArea").style.display =
+
+  document.getElementById(
+    "loginArea"
+  ).style.display =
     on ? "none" : "block";
 
-  document.getElementById("editorArea").style.display =
+
+  document.getElementById(
+    "editorArea"
+  ).style.display =
     on ? "block" : "none";
 
 }
 
 
-/* =========================================================
+/* =========================================
    LOAD REPOSTS
-========================================================= */
+========================================= */
 
-async function loadReposts() {
+async function loadReposts(){
 
-  try {
+  try{
 
-    const snap = await repostsRef
-      .orderBy("createdAt", "desc")
-      .get();
+    const snap =
+      await repostsRef
+        .orderBy("createdAt","desc")
+        .get();
 
-    items = snap.docs.map(d => ({
-      id: d.id,
-      ...d.data()
-    }));
+
+    items =
+      snap.docs.map(d => ({
+        id:d.id,
+        ...d.data()
+      }));
+
 
     render();
 
-  } catch (e) {
+
+  }catch(e){
 
     console.error(e);
 
-    document.getElementById("empty").textContent =
+
+    document.getElementById(
+      "empty"
+    ).textContent =
       "couldn't load reposts ♡";
 
   }
@@ -614,49 +728,64 @@ async function loadReposts() {
 }
 
 
-/* =========================================================
-   RENDER REPOSTS
-========================================================= */
+/* =========================================
+   RENDER
+========================================= */
 
-function render() {
+function render(){
 
-  const grid = document.getElementById("grid");
-  const empty = document.getElementById("empty");
+  const grid =
+    document.getElementById("grid");
+
+  const empty =
+    document.getElementById("empty");
+
 
   grid.innerHTML = "";
 
+
   empty.style.display =
-    items.length ? "none" : "block";
+    items.length
+      ? "none"
+      : "block";
 
 
   items.forEach(item => {
 
-    /* =========================
+    /* =====================================
        CARD
-    ========================= */
+    ===================================== */
 
-    const card = document.createElement("article");
+    const card =
+      document.createElement("article");
 
-    card.className = "card";
-
-
-    /* =========================
-       INSTAGRAM EMBED
-    ========================= */
-
-    const embed = document.createElement("div");
-
-    embed.className = "embed";
+    card.className =
+      "card";
 
 
-    const block = document.createElement("blockquote");
+    /* =====================================
+       EMBED
+    ===================================== */
 
-    block.className = "instagram-media";
+    const embed =
+      document.createElement("div");
+
+    embed.className =
+      "embed";
+
+
+    const block =
+      document.createElement("blockquote");
+
+    block.className =
+      "instagram-media";
+
 
     block.setAttribute(
       "data-instgrm-permalink",
       item.url
     );
+
 
     block.setAttribute(
       "data-instgrm-version",
@@ -665,12 +794,9 @@ function render() {
 
 
     /*
-      IMPORTANT:
-
-      No 326px minimum width.
-
-      This keeps the Instagram embed from forcing
-      the card wider than the grid.
+      Keep Instagram inside the card.
+      There is intentionally NO 326px
+      minimum width here.
     */
 
     block.style.cssText =
@@ -690,140 +816,176 @@ function render() {
     card.appendChild(embed);
 
 
-    /* =========================
+    /* =====================================
        CAPTION
-    ========================= */
+    ===================================== */
 
-    const caption = document.createElement("div");
+    const caption =
+      document.createElement("div");
+
 
     caption.className =
       "caption" +
-      (item.caption ? "" : " empty-caption");
+      (
+        item.caption
+          ? ""
+          : " empty-caption"
+      );
+
 
     caption.textContent =
       item.caption || "";
 
+
     card.appendChild(caption);
 
 
-    /* =========================
+    /* =====================================
        CAPTION EDITOR
-    ========================= */
+    ===================================== */
 
-    const editor = document.createElement("div");
+    const editor =
+      document.createElement("div");
 
-    editor.className = "caption-editor";
+    editor.className =
+      "caption-editor";
 
 
-    const textarea = document.createElement("textarea");
+    const textarea =
+      document.createElement("textarea");
+
 
     textarea.value =
       item.caption || "";
+
 
     textarea.placeholder =
       "edit caption ♡";
 
 
-    const editRow = document.createElement("div");
+    const editRow =
+      document.createElement("div");
 
-    editRow.className = "row";
+    editRow.className =
+      "row";
 
-    editRow.style.marginTop = "7px";
+    editRow.style.marginTop =
+      "7px";
 
 
-    /* =========================
+    /* =====================================
        SAVE
-    ========================= */
+    ===================================== */
 
-    const save = document.createElement("button");
+    const save =
+      document.createElement("button");
 
-    save.className = "save";
+
+    save.className =
+      "save";
+
 
     save.textContent =
       "save caption ♡";
 
 
-    save.onclick = async () => {
+    save.onclick =
+      async () => {
 
-      if (!auth.currentUser) {
-        return;
-      }
-
-      save.disabled = true;
-
-      try {
-
-        await repostsRef
-          .doc(item.id)
-          .update({
-            caption: textarea.value.trim()
-          });
+        if(!auth.currentUser){
+          return;
+        }
 
 
-        status(
-          "editorStatus",
-          "caption updated ♡"
-        );
+        save.disabled = true;
 
 
-        await loadReposts();
+        try{
 
-      } catch (e) {
-
-        console.error(e);
-
-        status(
-          "editorStatus",
-          "couldn't update caption ♡"
-        );
-
-        save.disabled = false;
-
-      }
-
-    };
+          await repostsRef
+            .doc(item.id)
+            .update({
+              caption:
+                textarea.value.trim()
+            });
 
 
-    /* =========================
+          status(
+            "editorStatus",
+            "caption updated ♡"
+          );
+
+
+          await loadReposts();
+
+
+        }catch(e){
+
+          console.error(e);
+
+
+          status(
+            "editorStatus",
+            "couldn't update caption ♡"
+          );
+
+
+          save.disabled = false;
+
+        }
+
+      };
+
+
+    /* =====================================
        CANCEL
-    ========================= */
+    ===================================== */
 
     const cancel =
       document.createElement("button");
 
+
     cancel.className =
       "cancel";
+
 
     cancel.textContent =
       "cancel";
 
 
-    cancel.onclick = () => {
+    cancel.onclick =
+      () => {
 
-      textarea.value =
-        item.caption || "";
+        textarea.value =
+          item.caption || "";
 
-      editor.style.display =
-        "none";
 
-    };
+        editor.style.display =
+          "none";
+
+      };
 
 
     editRow.appendChild(save);
+
     editRow.appendChild(cancel);
 
+
     editor.appendChild(textarea);
+
     editor.appendChild(editRow);
+
 
     card.appendChild(editor);
 
 
-    /* =========================
+    /* =====================================
        ADMIN ACTIONS
-    ========================= */
+    ===================================== */
 
     const actions =
       document.createElement("div");
+
 
     actions.className =
       "card-actions";
@@ -834,30 +996,33 @@ function render() {
     const edit =
       document.createElement("button");
 
+
     edit.className =
       "edit";
+
 
     edit.textContent =
       "edit caption";
 
 
-    edit.onclick = () => {
+    edit.onclick =
+      () => {
 
-      editor.style.display =
-        editor.style.display === "block"
-          ? "none"
-          : "block";
+        editor.style.display =
+          editor.style.display === "block"
+            ? "none"
+            : "block";
 
 
-      if (
-        editor.style.display === "block"
-      ) {
+        if(
+          editor.style.display === "block"
+        ){
 
-        textarea.focus();
+          textarea.focus();
 
-      }
+        }
 
-    };
+      };
 
 
     /* DELETE */
@@ -865,133 +1030,95 @@ function render() {
     const del =
       document.createElement("button");
 
+
     del.className =
       "delete";
+
 
     del.textContent =
       "delete";
 
 
-    del.onclick = async () => {
+    del.onclick =
+      async () => {
 
-      if (
-        !auth.currentUser ||
-        !confirm("Delete this repost?")
-      ) {
+        if(
+          !auth.currentUser ||
+          !confirm(
+            "Delete this repost?"
+          )
+        ){
 
-        return;
+          return;
 
-      }
-
-
-      try {
-
-        await repostsRef
-          .doc(item.id)
-          .delete();
+        }
 
 
-        status(
-          "editorStatus",
-          "repost deleted ♡"
-        );
+        try{
+
+          await repostsRef
+            .doc(item.id)
+            .delete();
 
 
-        await loadReposts();
+          status(
+            "editorStatus",
+            "repost deleted ♡"
+          );
 
-      } catch (e) {
 
-        console.error(e);
+          await loadReposts();
 
-        status(
-          "editorStatus",
-          "couldn't delete repost ♡"
-        );
 
-      }
+        }catch(e){
 
-    };
+          console.error(e);
+
+
+          status(
+            "editorStatus",
+            "couldn't delete repost ♡"
+          );
+
+        }
+
+      };
 
 
     actions.appendChild(edit);
+
     actions.appendChild(del);
 
+
     card.appendChild(actions);
+
 
     grid.appendChild(card);
 
   });
 
 
-  /* =========================================================
+  /* =========================================
      PROCESS INSTAGRAM EMBEDS
-  ========================================================= */
+  ========================================= */
 
-  if (window.instgrm) {
+  if(window.instgrm){
 
     window.instgrm.Embeds.process();
-
-
-    /*
-      Instagram can create a large internal embed
-      with black/empty space around Reels.
-
-      After Instagram finishes rendering, slightly
-      enlarge the embed and crop the excess sides.
-    */
-
-    setTimeout(() => {
-
-      document
-        .querySelectorAll(".embed")
-        .forEach(embed => {
-
-          embed.style.overflow = "hidden";
-          embed.style.position = "relative";
-
-
-          const insta =
-            embed.querySelector(".instagram-media");
-
-
-          if (insta) {
-
-            insta.style.transform =
-              "scale(1.17)";
-
-            insta.style.transformOrigin =
-              "center top";
-
-            insta.style.width =
-              "100%";
-
-            insta.style.maxWidth =
-              "none";
-
-            insta.style.minWidth =
-              "0";
-
-            insta.style.margin =
-              "0";
-
-          }
-
-        });
-
-    }, 1200);
 
   }
 
 }
 
 
-/* =========================================================
+/* =========================================
    ADMIN BUTTON
-========================================================= */
+========================================= */
 
 document
   .getElementById("adminBtn")
-  .onclick = () => {
+  .onclick =
+  () => {
 
     document
       .getElementById("adminPanel")
@@ -1000,13 +1127,14 @@ document
   };
 
 
-/* =========================================================
+/* =========================================
    LOGIN
-========================================================= */
+========================================= */
 
 document
   .getElementById("loginBtn")
-  .onclick = async () => {
+  .onclick =
+  async () => {
 
     const email =
       document
@@ -1021,7 +1149,7 @@ document
         .value;
 
 
-    if (!email || !password) {
+    if(!email || !password){
 
       return status(
         "loginStatus",
@@ -1031,7 +1159,7 @@ document
     }
 
 
-    try {
+    try{
 
       await auth
         .signInWithEmailAndPassword(
@@ -1042,15 +1170,17 @@ document
 
       setAdmin(true);
 
+
       status(
         "loginStatus",
         ""
       );
 
 
-    } catch (e) {
+    }catch(e){
 
       console.error(e);
+
 
       status(
         "loginStatus",
@@ -1062,9 +1192,9 @@ document
   };
 
 
-/* =========================================================
+/* =========================================
    ENTER TO LOGIN
-========================================================= */
+========================================= */
 
 document
   .getElementById("password")
@@ -1072,7 +1202,7 @@ document
     "keydown",
     e => {
 
-      if (e.key === "Enter") {
+      if(e.key === "Enter"){
 
         document
           .getElementById("loginBtn")
@@ -1084,13 +1214,14 @@ document
   );
 
 
-/* =========================================================
+/* =========================================
    LOGOUT
-========================================================= */
+========================================= */
 
 document
   .getElementById("logoutBtn")
-  .onclick = async () => {
+  .onclick =
+  async () => {
 
     await auth.signOut();
 
@@ -1099,15 +1230,16 @@ document
   };
 
 
-/* =========================================================
+/* =========================================
    ADD REPOST
-========================================================= */
+========================================= */
 
 document
   .getElementById("addBtn")
-  .onclick = async () => {
+  .onclick =
+  async () => {
 
-    if (!auth.currentUser) {
+    if(!auth.currentUser){
 
       return status(
         "editorStatus",
@@ -1132,7 +1264,7 @@ document
         .trim();
 
 
-    if (!url) {
+    if(!url){
 
       return status(
         "editorStatus",
@@ -1142,13 +1274,13 @@ document
     }
 
 
-    try {
+    try{
 
       await repostsRef.add({
 
-        url,
+        url:url,
 
-        caption,
+        caption:caption,
 
         createdAt:
           firebase
@@ -1178,9 +1310,10 @@ document
       await loadReposts();
 
 
-    } catch (e) {
+    }catch(e){
 
       console.error(e);
+
 
       status(
         "editorStatus",
@@ -1192,20 +1325,22 @@ document
   };
 
 
-/* =========================================================
-   KEEP ADMIN STATE SYNCED
-========================================================= */
+/* =========================================
+   AUTH STATE
+========================================= */
 
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(
+  user => {
 
-  setAdmin(!!user);
+    setAdmin(!!user);
 
-});
+  }
+);
 
 
-/* =========================================================
-   LOAD REPOSTS WHEN PAGE OPENS
-========================================================= */
+/* =========================================
+   INITIAL LOAD
+========================================= */
 
 loadReposts();
 
