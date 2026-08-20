@@ -61,18 +61,6 @@ button:hover{
   padding:34px 24px 80px;
 }
 
-.top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:18px;
-}
-
-.brand{
-  text-align:left;
-}
-
 header{
   margin-bottom:42px;
 }
@@ -109,12 +97,6 @@ h1{
 
 .admin-btn:hover{
   background:var(--pink-soft);
-}
-
-.divider{
-  height:1px;
-  background:var(--line);
-  margin:0 0 28px;
 }
 
 .admin-panel{
@@ -181,7 +163,9 @@ textarea{
 .delete,
 .edit,
 .save,
-.cancel{
+.cancel,
+.history-btn,
+.clear-history{
   border-radius:999px;
   padding:9px 15px;
   cursor:pointer;
@@ -330,18 +314,111 @@ textarea{
   color:var(--muted);
 }
 
+
+/* =========================================
+   VIEWER HISTORY
+========================================= */
+
+.history-section{
+  margin-top:30px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+}
+
+.history-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.history-header h3{
+  margin:0;
+  font-size:17px;
+  font-weight:500;
+}
+
+.history-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.history-btn{
+  border:1px solid var(--line);
+  background:#fffafd;
+  color:var(--text);
+}
+
+.clear-history{
+  border:1px solid #f0d5dc;
+  background:#fff3f5;
+  color:#a05d6d;
+}
+
+.history-table-wrap{
+  width:100%;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#fffafd;
+}
+
+.history-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+.history-table th{
+  text-align:left;
+  padding:11px 10px;
+  color:var(--muted);
+  font-weight:normal;
+  background:#fff5f8;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+.history-table td{
+  padding:10px;
+  border-bottom:1px solid #f3e6eb;
+  vertical-align:top;
+}
+
+.history-table tr:last-child td{
+  border-bottom:0;
+}
+
+.history-ip{
+  white-space:nowrap;
+}
+
+.history-empty{
+  text-align:center;
+  color:var(--muted);
+  padding:25px 15px;
+  font-size:13px;
+}
+
+.history-small{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
 .empty{
   text-align:center;
   color:var(--muted);
   padding:85px 20px;
   font-size:14px;
-}
-
-.footer-heart{
-  text-align:center;
-  color:#caa8b3;
-  font-size:13px;
-  margin-top:38px;
 }
 
 
@@ -376,10 +453,6 @@ textarea{
 
 @media(max-width:520px){
 
-  .top{
-    align-items:flex-start;
-  }
-
   .grid{
     grid-template-columns:1fr;
   }
@@ -394,14 +467,15 @@ textarea{
     right:12px;
   }
 
+  .history-table{
+    min-width:650px;
+  }
+
 }
 </style>
 
 
-<!-- =========================================
-     FIREBASE
-========================================= -->
-
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
@@ -423,6 +497,7 @@ textarea{
 
 <header>
   <h1>reposts ♡</h1>
+
   <p class="subtitle">
     little things worth reposting
   </p>
@@ -558,6 +633,90 @@ textarea{
       add, edit or remove reposts here ♡ everyone sees the same updates.
     </p>
 
+
+    <!-- =====================================
+         VIEWER HISTORY
+    ====================================== -->
+
+    <div class="history-section">
+
+      <div class="history-header">
+
+        <h3>
+          viewer history ♡
+        </h3>
+
+        <div class="history-actions">
+
+          <button
+            class="history-btn"
+            id="refreshHistoryBtn"
+          >
+            refresh
+          </button>
+
+          <button
+            class="clear-history"
+            id="clearHistoryBtn"
+          >
+            clear history
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="status"
+        id="historyStatus"
+      ></div>
+
+
+      <div class="history-table-wrap">
+
+        <table class="history-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                time
+              </th>
+
+              <th>
+                IP
+              </th>
+
+              <th>
+                page
+              </th>
+
+              <th>
+                device
+              </th>
+
+              <th>
+                browser
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody
+            id="historyBody"
+          >
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
   </div>
 
 </section>
@@ -610,6 +769,20 @@ const db = firebase.firestore();
 const repostsRef =
   db.collection("reposts");
 
+const viewerHistoryRef =
+  db.collection("viewerHistory");
+
+
+/*
+  YOUR IP.
+
+  Visits from this IP are NOT saved
+  to viewerHistory.
+*/
+
+const EXCLUDED_IP =
+  "99.229.26.137";
+
 
 let items = [];
 
@@ -624,7 +797,10 @@ function status(id,text){
     document.getElementById(id);
 
   if(element){
-    element.textContent = text;
+
+    element.textContent =
+      text;
+
   }
 
 }
@@ -686,6 +862,13 @@ function setAdmin(on){
   ).style.display =
     on ? "block" : "none";
 
+
+  if(on){
+
+    loadViewerHistory();
+
+  }
+
 }
 
 
@@ -729,7 +912,7 @@ async function loadReposts(){
 
 
 /* =========================================
-   RENDER
+   RENDER REPOSTS
 ========================================= */
 
 function render(){
@@ -752,10 +935,6 @@ function render(){
 
   items.forEach(item => {
 
-    /* =====================================
-       CARD
-    ===================================== */
-
     const card =
       document.createElement("article");
 
@@ -763,9 +942,7 @@ function render(){
       "card";
 
 
-    /* =====================================
-       EMBED
-    ===================================== */
+    /* EMBED */
 
     const embed =
       document.createElement("div");
@@ -793,12 +970,6 @@ function render(){
     );
 
 
-    /*
-      Keep Instagram inside the card.
-      There is intentionally NO 326px
-      minimum width here.
-    */
-
     block.style.cssText =
       "background:#FFF;" +
       "border:0;" +
@@ -816,9 +987,7 @@ function render(){
     card.appendChild(embed);
 
 
-    /* =====================================
-       CAPTION
-    ===================================== */
+    /* CAPTION */
 
     const caption =
       document.createElement("div");
@@ -840,9 +1009,7 @@ function render(){
     card.appendChild(caption);
 
 
-    /* =====================================
-       CAPTION EDITOR
-    ===================================== */
+    /* EDITOR */
 
     const editor =
       document.createElement("div");
@@ -873,9 +1040,7 @@ function render(){
       "7px";
 
 
-    /* =====================================
-       SAVE
-    ===================================== */
+    /* SAVE */
 
     const save =
       document.createElement("button");
@@ -893,7 +1058,9 @@ function render(){
       async () => {
 
         if(!auth.currentUser){
+
           return;
+
         }
 
 
@@ -937,9 +1104,7 @@ function render(){
       };
 
 
-    /* =====================================
-       CANCEL
-    ===================================== */
+    /* CANCEL */
 
     const cancel =
       document.createElement("button");
@@ -979,13 +1144,10 @@ function render(){
     card.appendChild(editor);
 
 
-    /* =====================================
-       ADMIN ACTIONS
-    ===================================== */
+    /* ACTIONS */
 
     const actions =
       document.createElement("div");
-
 
     actions.className =
       "card-actions";
@@ -1098,13 +1260,466 @@ function render(){
   });
 
 
-  /* =========================================
-     PROCESS INSTAGRAM EMBEDS
-  ========================================= */
+  /* INSTAGRAM */
 
   if(window.instgrm){
 
     window.instgrm.Embeds.process();
+
+  }
+
+}
+
+
+/* =========================================
+   GET VISITOR IP
+========================================= */
+
+async function getVisitorIP(){
+
+  try{
+
+    const response =
+      await fetch(
+        "https://api.ipify.org?format=json",
+        {
+          cache:"no-store"
+        }
+      );
+
+
+    if(!response.ok){
+
+      return null;
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    return data.ip || null;
+
+
+  }catch(e){
+
+    console.error(
+      "IP lookup failed:",
+      e
+    );
+
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================
+   GET SIMPLE BROWSER NAME
+========================================= */
+
+function getBrowserName(){
+
+  const ua =
+    navigator.userAgent;
+
+
+  if(/Edg\//i.test(ua)){
+    return "Edge";
+  }
+
+  if(/OPR\//i.test(ua)){
+    return "Opera";
+  }
+
+  if(/Chrome\//i.test(ua) &&
+     !/Edg\//i.test(ua)){
+    return "Chrome";
+  }
+
+  if(/Firefox\//i.test(ua)){
+    return "Firefox";
+  }
+
+  if(/Safari\//i.test(ua) &&
+     !/Chrome\//i.test(ua)){
+    return "Safari";
+  }
+
+  return "Other";
+
+}
+
+
+/* =========================================
+   GET DEVICE TYPE
+========================================= */
+
+function getDeviceType(){
+
+  const width =
+    window.innerWidth;
+
+
+  if(width <= 520){
+    return "phone";
+  }
+
+  if(width <= 1000){
+    return "tablet";
+  }
+
+  return "desktop";
+
+}
+
+
+/* =========================================
+   RECORD VIEWER
+========================================= */
+
+async function recordViewer(){
+
+  try{
+
+    const ip =
+      await getVisitorIP();
+
+
+    /*
+      If the IP lookup failed,
+      don't create an unidentified record.
+    */
+
+    if(!ip){
+
+      return;
+
+    }
+
+
+    /*
+      THIS IS THE IMPORTANT PART.
+
+      Your own IP is ignored completely.
+    */
+
+    if(ip === EXCLUDED_IP){
+
+      return;
+
+    }
+
+
+    await viewerHistoryRef.add({
+
+      ip:ip,
+
+      visitedAt:
+        firebase
+          .firestore
+          .FieldValue
+          .serverTimestamp(),
+
+      page:
+        window.location.pathname,
+
+      url:
+        window.location.href,
+
+      referrer:
+        document.referrer || "",
+
+      browser:
+        getBrowserName(),
+
+      device:
+        getDeviceType(),
+
+      screen:
+        window.innerWidth +
+        "x" +
+        window.innerHeight,
+
+      userAgent:
+        navigator.userAgent
+
+    });
+
+
+  }catch(e){
+
+    /*
+      Viewer history should NEVER
+      break the repost page.
+    */
+
+    console.error(
+      "Viewer history error:",
+      e
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   LOAD VIEWER HISTORY
+========================================= */
+
+async function loadViewerHistory(){
+
+  const body =
+    document.getElementById(
+      "historyBody"
+    );
+
+
+  body.innerHTML =
+    '<tr><td colspan="5" class="history-empty">loading history ♡</td></tr>';
+
+
+  try{
+
+    const snap =
+      await viewerHistoryRef
+        .orderBy(
+          "visitedAt",
+          "desc"
+        )
+        .limit(200)
+        .get();
+
+
+    body.innerHTML = "";
+
+
+    if(snap.empty){
+
+      body.innerHTML =
+        '<tr><td colspan="5" class="history-empty">no viewers yet ♡</td></tr>';
+
+      return;
+
+    }
+
+
+    snap.forEach(doc => {
+
+      const data =
+        doc.data();
+
+
+      const row =
+        document.createElement("tr");
+
+
+      /* TIME */
+
+      const timeCell =
+        document.createElement("td");
+
+
+      if(data.visitedAt){
+
+        const date =
+          data.visitedAt
+            .toDate();
+
+
+        timeCell.textContent =
+          date.toLocaleString();
+
+      }else{
+
+        timeCell.textContent =
+          "just now";
+
+      }
+
+
+      /* IP */
+
+      const ipCell =
+        document.createElement("td");
+
+
+      ipCell.className =
+        "history-ip";
+
+
+      ipCell.textContent =
+        data.ip || "unknown";
+
+
+      /* PAGE */
+
+      const pageCell =
+        document.createElement("td");
+
+
+      pageCell.textContent =
+        data.page || "/";
+
+
+      /* DEVICE */
+
+      const deviceCell =
+        document.createElement("td");
+
+
+      deviceCell.textContent =
+        data.device || "unknown";
+
+
+      /* BROWSER */
+
+      const browserCell =
+        document.createElement("td");
+
+
+      const browserName =
+        data.browser || "unknown";
+
+
+      const screen =
+        data.screen || "";
+
+
+      browserCell.innerHTML =
+        "<strong>" +
+        browserName +
+        "</strong>" +
+        (
+          screen
+            ? '<div class="history-small">' +
+              screen +
+              "</div>"
+            : ""
+        );
+
+
+      row.appendChild(timeCell);
+
+      row.appendChild(ipCell);
+
+      row.appendChild(pageCell);
+
+      row.appendChild(deviceCell);
+
+      row.appendChild(browserCell);
+
+
+      body.appendChild(row);
+
+    });
+
+
+    status(
+      "historyStatus",
+      "showing the 200 most recent visits ♡"
+    );
+
+
+  }catch(e){
+
+    console.error(e);
+
+
+    body.innerHTML =
+      '<tr><td colspan="5" class="history-empty">couldn\'t load viewer history ♡</td></tr>';
+
+
+    status(
+      "historyStatus",
+      "check your Firestore rules ♡"
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   CLEAR VIEWER HISTORY
+========================================= */
+
+async function clearViewerHistory(){
+
+  if(!auth.currentUser){
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Clear all viewer history?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const snap =
+      await viewerHistoryRef
+        .limit(500)
+        .get();
+
+
+    if(snap.empty){
+
+      status(
+        "historyStatus",
+        "history is already empty ♡"
+      );
+
+      return;
+
+    }
+
+
+    const batch =
+      db.batch();
+
+
+    snap.forEach(doc => {
+
+      batch.delete(doc.ref);
+
+    });
+
+
+    await batch.commit();
+
+
+    status(
+      "historyStatus",
+      "viewer history cleared ♡"
+    );
+
+
+    await loadViewerHistory();
+
+
+  }catch(e){
+
+    console.error(e);
+
+
+    status(
+      "historyStatus",
+      "couldn't clear history ♡"
+    );
 
   }
 
@@ -1326,6 +1941,34 @@ document
 
 
 /* =========================================
+   HISTORY BUTTONS
+========================================= */
+
+document
+  .getElementById(
+    "refreshHistoryBtn"
+  )
+  .onclick =
+  () => {
+
+    loadViewerHistory();
+
+  };
+
+
+document
+  .getElementById(
+    "clearHistoryBtn"
+  )
+  .onclick =
+  () => {
+
+    clearViewerHistory();
+
+  };
+
+
+/* =========================================
    AUTH STATE
 ========================================= */
 
@@ -1343,6 +1986,16 @@ auth.onAuthStateChanged(
 ========================================= */
 
 loadReposts();
+
+
+/*
+  Record this visitor separately from
+  the repost loading system.
+
+  Your excluded IP will never be saved.
+*/
+
+recordViewer();
 
 </script>
 
