@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reposts ♡</title>
+<style>
+:root{--pink:#f8dfe8;--pink2:#fff3f7;--text:#5f4c54;--muted:#9b858e;--border:#f0d7e0;--shadow:0 8px 25px rgba(150,105,125,.10)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#fff8fa 0%,#fff 42%);color:var(--text);font-family:Georgia,"Times New Roman",serif}
+button,input,textarea{font:inherit}.page{max-width:1100px;margin:auto;padding:42px 22px 70px}header{text-align:center;margin-bottom:34px}
+h1{margin:0;font-size:36px;font-weight:500}.subtitle{margin:8px 0 0;color:var(--muted);font-size:14px}
+.admin-btn{position:fixed;right:18px;top:18px;z-index:20;border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 13px;color:var(--text);cursor:pointer;box-shadow:var(--shadow)}
+.admin-panel{display:none;background:#fff;border:1px solid var(--border);border-radius:20px;padding:20px;margin:0 auto 30px;max-width:650px;box-shadow:var(--shadow)}
+.admin-panel.open{display:block}.admin-panel h2{font-size:20px;font-weight:500;margin:0 0 15px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+input,textarea{width:100%;border:1px solid var(--border);background:#fffafd;border-radius:12px;padding:11px 12px;outline:none;color:var(--text)}
+textarea{min-height:70px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap}.primary,.secondary,.delete{border:0;border-radius:999px;padding:10px 16px;cursor:pointer}
+.primary{background:var(--pink);color:var(--text)}.secondary{background:var(--pink2);color:var(--text);border:1px solid var(--border)}.delete{background:#fff0f3;color:#9a5366}
+.status{font-size:12px;color:var(--muted);margin-top:10px;min-height:16px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:12px;box-shadow:var(--shadow);overflow:hidden}
+.embed{border-radius:14px;overflow:hidden;background:#faf5f7;min-height:260px}.caption{padding:12px 5px 3px;font-size:14px;line-height:1.5;white-space:pre-wrap}.card-actions{display:none;margin-top:10px;justify-content:flex-end}.admin-on .card-actions{display:flex}
+.empty{text-align:center;color:var(--muted);padding:70px 20px}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.page{padding:32px 14px 55px}h1{font-size:31px}.grid{grid-template-columns:1fr}}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
+</head>
+<body>
+<button class="admin-btn" id="adminBtn">♡ admin</button>
+<main class="page">
+<header><h1>reposts ♡</h1><p class="subtitle">little things worth reposting</p></header>
+<section class="admin-panel" id="adminPanel">
+<h2>admin ♡</h2>
+<div id="loginArea">
+<div class="field"><label>admin email</label><input id="email" type="email" autocomplete="username" placeholder="your email"></div>
+<div class="field"><label>admin password</label><input id="password" type="password" autocomplete="current-password" placeholder="your Firebase password"></div>
+<button class="primary" id="loginBtn">unlock ♡</button><div class="status" id="loginStatus"></div>
+</div>
+<div id="editorArea" style="display:none">
+<div class="field"><label>Instagram post / reel link</label><input id="url" type="url" placeholder="https://www.instagram.com/p/.../"></div>
+<div class="field"><label>caption</label><textarea id="caption" placeholder="write a little caption ♡"></textarea></div>
+<div class="row"><button class="primary" id="addBtn">add repost ♡</button><button class="secondary" id="logoutBtn">lock</button></div>
+<div class="status" id="editorStatus"></div><p class="note">Anything you add here is saved to the shared Firebase database, so everyone sees the same reposts.</p>
+</div>
+</section>
+<section class="grid" id="grid"></section><div class="empty" id="empty">loading reposts ♡</div>
+</main>
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyDdnRqRysHijmVJo9lqGHz5Oc7YaigNDow",
+authDomain:"mads-reposts.firebaseapp.com",
+projectId:"mads-reposts",
+storageBucket:"mads-reposts.firebasestorage.app",
+messagingSenderId:"366856299182",
+appId:"1:366856299182:web:0abe419dac4929a134c33f",
+measurementId:"G-LDN3FL4JCM"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(),db=firebase.firestore(),repostsRef=db.collection("reposts");
+let items=[];
+function status(id,text){document.getElementById(id).textContent=text}
+function normalizeUrl(raw){try{const u=new URL(raw.trim());if(!/instagram\.com$/i.test(u.hostname)&&!/\.instagram\.com$/i.test(u.hostname))return null;return u.href}catch{return null}}
+function setAdmin(on){document.body.classList.toggle("admin-on",on);document.getElementById("loginArea").style.display=on?"none":"block";document.getElementById("editorArea").style.display=on?"block":"none"}
+async function loadReposts(){try{const snap=await repostsRef.orderBy("createdAt","desc").get();items=snap.docs.map(d=>({id:d.id,...d.data()}));render()}catch(e){console.error(e);document.getElementById("empty").textContent="couldn't load reposts ♡"}}
+function render(){const grid=document.getElementById("grid"),empty=document.getElementById("empty");grid.innerHTML="";empty.style.display=items.length?"none":"block";
+items.forEach(item=>{const card=document.createElement("article");card.className="card";const embed=document.createElement("div");embed.className="embed";const block=document.createElement("blockquote");block.className="instagram-media";block.setAttribute("data-instgrm-permalink",item.url);block.setAttribute("data-instgrm-version","14");block.style.cssText="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,.5),0 1px 10px 0 rgba(0,0,0,.15);margin:0;max-width:540px;min-width:326px;padding:0;width:100%;";embed.appendChild(block);card.appendChild(embed);
+if(item.caption){const c=document.createElement("div");c.className="caption";c.textContent=item.caption;card.appendChild(c)}
+const actions=document.createElement("div");actions.className="card-actions";const del=document.createElement("button");del.className="delete";del.textContent="delete";del.onclick=async()=>{if(!auth.currentUser||!confirm("Delete this repost?"))return;try{await repostsRef.doc(item.id).delete();status("editorStatus","repost deleted ♡");await loadReposts()}catch(e){console.error(e);status("editorStatus","couldn't delete repost ♡")}};actions.appendChild(del);card.appendChild(actions);grid.appendChild(card)});
+if(window.instgrm)window.instgrm.Embeds.process()}
+document.getElementById("adminBtn").onclick=()=>document.getElementById("adminPanel").classList.toggle("open");
+document.getElementById("loginBtn").onclick=async()=>{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;if(!email||!password)return status("loginStatus","enter your email and password ♡");try{await auth.signInWithEmailAndPassword(email,password);setAdmin(true);status("loginStatus","")}catch(e){console.error(e);status("loginStatus","incorrect email or password ♡")}};
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("loginBtn").click()});
+document.getElementById("logoutBtn").onclick=async()=>{await auth.signOut();setAdmin(false)};
+document.getElementById("addBtn").onclick=async()=>{if(!auth.currentUser)return status("editorStatus","please log in first ♡");const url=normalizeUrl(document.getElementById("url").value),caption=document.getElementById("caption").value.trim();if(!url)return status("editorStatus","please enter a valid Instagram link ♡");try{await repostsRef.add({url,caption,createdAt:firebase.firestore.FieldValue.serverTimestamp()});document.getElementById("url").value="";document.getElementById("caption").value="";status("editorStatus","repost saved for everyone ♡");await loadReposts()}catch(e){console.error(e);status("editorStatus","couldn't save repost ♡")}};
+auth.onAuthStateChanged(user=>setAdmin(!!user));loadReposts();
+</script>
+</body>
+</html>
